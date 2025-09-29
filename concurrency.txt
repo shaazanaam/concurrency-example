@@ -1,0 +1,14 @@
+The concurrency is the execution of several tasks simultaneously and is used to omprove through put ( by using several processors for a 
+ single computation ) or to improve responsiveness( By allowing one part of a program to progress while the other is waiting for the 
+ responsiveness
+ 
+ the one provided by the standard library directly supports the concurrent execution of multiple threads in a single address space .
+ C++ allow a suitable memory model and a set of atomic operations . However most users will see concurrency only in terms of the standards library built on top of that 
+ The main standard library concurrency support facilites are 
+ 1. threads mutexes lock() operations, packaged_tasks and futures
+ these features are built directly upon what operating systems offer and do not incur performance penalties compared with those.
+
+
+ A computation that can potentially be executed concurrently with other computations is a task. A thread is a system level 
+ representation of a task in a program . A task to be executed concurrently with other tasks is launched by the constructing a 
+ std::thread ( found in <thread>) with the task as its argument . A task is a function or a function object
