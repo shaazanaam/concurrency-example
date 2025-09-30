@@ -25,6 +25,10 @@ void f(){                                                   //function
 }  
 
 struct F{               //function object
+    
+    vector<double>& v;
+    F(vector<double>& vv):v{vv}{}
+    
     void operator()(){
         for(int i = 0 ; i<3;++i){
             cout<<"F step "<<i <<" ("<<this_thread::get_id()<<")\n";
@@ -32,11 +36,22 @@ struct F{               //function object
         }
     };  //F's call operator 
 };
+void f2 (vector<double>& v)   //function do something with the vector v
+{
+    for(size_t i = 0 ; i <v.size(); ++i){
+        safe_print("f2 processing element " + to_string(i) + ": " + to_string(v[i]) + "\n");
+        this_thread::sleep_for(chrono::milliseconds(50));
+        
+    }
+}
 
 void user()
 {
-    thread t1{f};
-    thread t2 {F()};
+    vector<double> some_vec{1,2,3,4,5,6,7,8,9};
+    vector<double> vec2 {10,11,12,13,14};
+    
+    thread t1{f2,std::ref(some_vec)};
+    thread t2 {F{vec2}};
 
     t1.join();
     t2.join();
