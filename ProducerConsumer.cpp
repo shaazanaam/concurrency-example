@@ -38,7 +38,12 @@ void consumer(){
 
         // Wait until the queue is not empty OR the producer is finished 
 
-        mcond.wait(lck, []{return !mqueue.empty() || finished; });
+        mcond.wait(lck, []{return !mqueue.empty() || finished; });// wait returns only when the condition is true and the lock is held
+
+        // wait handles the lock operation - Releases the lock if the conditon is false 
+        //Releases the lock if the conditon is false 
+        //Returns only when the lock is help and the conditon is true
+
 
         //If the queue is empty and the producer is finished , exit
         if (mqueue.empty() && finished){
