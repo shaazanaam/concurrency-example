@@ -40,12 +40,12 @@ mcond.wait(lck,lambda)
     //Step-By-Step Process:
     mcond.notify_one();   //This wakes up the consumer  thread
 
-4.  //1. notify_one() wakes up the sleeping thread 
-    //2. The awakened consumer thread tries to reqcquire the lock3 .
+4.  //1.notify_one() wakes up the sleeping thread 
+    //2.The awakened consumer thread tries to reqcquire the lock3 .
     //3.Consumer thread gets the lock when it becomes available 
-    //4. Consumer thread checks the conditon again
+    //4.Consumer thread checks the conditon again
 
-        Producer Thread          Consumer Thread
+    Producer Thread          Consumer Thread
     ===============          ===============
     Lock acquired            (sleeping, no lock)
     Add to queue            
@@ -59,7 +59,7 @@ mcond.wait(lck,lambda)
                                  ↓
                              Continue with lock held
 
-        // If producer did this (BAD example):
+    // If producer did this (BAD example):
     
     
     
@@ -72,7 +72,14 @@ mcond.wait(lck,lambda)
 
 Now the sequence:
 
-Time 1: Producer releases lock (end of scope }) Time 2: Producer calls notify_one() Time 3: Consumer thread wakes up Time 4: Consumer thread tries to acquire the lock Time 5: Consumer thread successfully acquires the lock (since producer released it) Time 6: Consumer thread checks condition !mqueue.empty() || finished Time 7: Condition is TRUE (queue not empty), so wait() returns Time 8: Consumer continues execution with lock held.
+Time 1: Producer releases lock (end of scope ) 
+Time 2: Producer calls notify_one() 
+Time 3: Consumer thread wakes up 
+Time 4: Consumer thread tries to acquire the lock 
+Time 5: Consumer thread successfully acquires the lock (since producer released it) 
+Time 6: Consumer thread checks condition !mqueue.empty() || finished 
+Time 7: Condition is TRUE (queue not empty), so wait() returns 
+Time 8: Consumer continues execution with lock held.
 
 In this case:
 
@@ -87,5 +94,7 @@ Key Points
     2. The awakened thread must acquire the lock itself -- this might stay blocked if there is another thread that holds it
     3. In you code , timing works perfectly becasue the producer releases the lock before notifying 
     4. The lck in the wait() automatically handles the lock acquisiton when the thread wakes up 
+
+    
 
     
