@@ -1,34 +1,34 @@
 What is a packaged task?
-It is a wraooer that :
-. Packages a function for execution in another thread
-. Automatically creates a future to get the result
-. Connects function execution with result retrieval
+    It is a wrapper that :
+    . Packages a function for execution in another thread
+    . Automatically creates a future to get the result
+    . Connects function execution with result retrieval
 
 Code Breakdown:
 1. Function to be Packaged:
-double accum(double* beg, double* end, double init) {
-    // Compute the sum of [beg:end) starting with initial value init
-    return accumulate(beg, end, init);
-}
+    double accum(double* beg, double* end, double init) {
+        // Compute the sum of [beg:end) starting with initial value init
+        return accumulate(beg, end, init);
+    }
 
-This function sums the elements in a range [beg, end) starting with init
+    This function sums the elements in a range [beg, end) starting with init
 
 
 2. Type Alias for Clarity 
 
-using Task_type = double(double* , double*, double);
+    using Task_type = double(double* , double*, double);
 
-This defines the function signature that the packaged_task will wrap 
+    This defines the function signature that the packaged_task will wrap 
 
 3. Creating packaged Tasks:
 
-packaged_task<Task_type> pt0{accum};   // Package the accum function
-packaged_task<Task_type> pt1{accum};   // Another package of accum
-packaged_task<Task_type> pt2{accum};   // Third package (unused in your code)
+    packaged_task<Task_type> pt0{accum};   // Package the accum function
+    packaged_task<Task_type> pt1{accum};   // Another package of accum
+    packaged_task<Task_type> pt2{accum};   // Third package (unused in your code)
 
-What this does 
-    . Wraps the accum function for async execution 
-    . Each packaged_task can be executed once
+    What this does 
+        . Wraps the accum function for async execution 
+        . Each packaged_task can be executed once
 
 4. Getting Futures
 
