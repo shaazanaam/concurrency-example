@@ -252,3 +252,46 @@ g++ -std=c++20 -Wall -Wextra iterator_traits.cpp -o iterator_traits.exe
 This demonstrates the power of template specialization and iterator traits - one smart_sort() function that automatically chooses the best strategy for any container type!
 
 
+// 1. These function parameters are the TAGS:
+template <typename Ran>
+void sort_helper(Ran beg, Ran end, random_access_iterator_tag)
+//                                  ^^^^^^^^^^^^^^^^^^^^^^^^
+//                                  This is a TAG parameter
+
+template<typename For>
+void sort_helper(For beg, For end, forward_iterator_tag)
+//                                  ^^^^^^^^^^^^^^^^^^^^
+//                                  This is a TAG parameter
+
+// 2. This line CREATES a tag and passes it:
+template<typename Iterator>
+void smart_sort(Iterator beg, Iterator end)
+{
+    sort_helper(beg, end, typename iterator_traits<Iterator>::iterator_category{});
+    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //                    This creates a tag object (empty struct instance)
+}
+
+
+
+HOW the tag dispatch works
+
+// Step 1: smart_sort determines what kind of iterator it has
+smart_sort(my_vector.begin(), my_vector.end());
+
+// Step 2: iterator_traits figures out the category
+typename iterator_traits<vector<int>::iterator>::iterator_category{}
+// This creates: random_access_iterator_tag{}
+
+// Step 3: Compiler selects matching overload
+sort_helper(beg, end, random_access_iterator_tag{});
+//                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//                    Matches this function:
+//                    void sort_helper(Ran beg, Ran end, random_access_iterator_tag)
+
+
+Breaking down the template :
+
+typename iterator_traits<vector<int>::iterator>::iterator_category
+
+

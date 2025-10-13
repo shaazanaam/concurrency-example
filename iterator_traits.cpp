@@ -99,7 +99,7 @@ int main()
     cout<<"3. List ( Bidirectional Iterators): \n";
 
     list<int> lst {5,2,8,1,9,3};
-    print(lst, "Befor Sorting");
+    print(lst, "Before Sorting");
     smart_sort(lst);
     print(lst, "After sorting");
     cout<<"Strategy: Copy to vector -> sort 0 copy back \n\n";
