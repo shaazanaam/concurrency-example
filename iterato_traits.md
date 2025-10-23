@@ -11,8 +11,8 @@ iterator is supported. Given that, we can improve the range sort() from §4.5.6 
 vector or a forward_list. For example:
 void test(vector<string>& v, forward_list<int>& lst)
 {
-sort(v); // sor t the vector
-sort(lst); // sor t the singly-linked list
+sort(v); // sort the vector
+sort(lst); // sort the singly-linked list
 }
 The techniques needed to make that work are generally useful.
 First, I write two helper functions that take an extra argument indicating whether they are to be
