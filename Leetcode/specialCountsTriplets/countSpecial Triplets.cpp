@@ -7,22 +7,39 @@ class Solution{
     public:
         int specialTriplets(vector<int> nums){
 
-            unordered_map <int, int > freqPrev;
-            unordered_map<int,int> freqNext;
-
-            int i,j,k;
-
-            for (size_t i =0; i<nums.size();++i){
-                if(freqPrev.find(nums.at(i))!= freqPrev.end()){
-                    ++freqPrev[nums.at(i)];
-                    
-                }
-
+            unordered_map <long, long > freqPrev;
+            unordered_map<long,long> freqNext;         
+            
+            for ( int x: nums){
+                freqNext[x]++;
             }
-            for( size_t i = 0; i<nums.size();++i){
-                 cout <<nums.at(i)<<" in the Vector num is "<<freqPrev[nums.at(i)]<<" times\n";
+
+
+            long long ans = 0;
+
+            // treat each index as the middle element
+
+            for ( int j = 0; (int)nums.size();++j){
+                long long x= nums[j];
+
+                // Move the current elment from the rightr side to the current (so k>j only)
+
+                freqNext[x]--;
+
+                long long target = x*2;
+
+                long long prevCount = freqPrev[target];   //hpow many nums[i] ==2*x for i<j
+                long long nextCount = freqNext[target];  //how many nums[k] ==2*x for k>j
+
+                ans = (ans+ (prevCount*nextCount));
+
+                freqPrev[x]++;  
+
+                //Now nums[j] becoems the  part of the left side for the future j's
             }
-                return 0;
+
+        
+             return ans;
         }
 };
 
@@ -38,7 +55,7 @@ int main(){
 
     Solution sol;
 
-    sol.specialTriplets(nums);
+    cout<<"ans "<<sol.specialTriplets(nums);
 
     //Now nums contains the user input
     //.. use nums as needed ...
