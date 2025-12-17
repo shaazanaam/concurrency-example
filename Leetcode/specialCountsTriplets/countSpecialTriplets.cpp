@@ -9,7 +9,7 @@ class Solution{
 
             unordered_map <long, long > freqPrev;
             unordered_map<long,long> freqNext;         
-            
+            const long long MOD = 1000000007LL;
             for ( int x: nums){
                 freqNext[x]++;
             }
@@ -19,15 +19,15 @@ class Solution{
 
             // treat each index as the middle element
 
-            for ( int j = 0; (int)nums.size();++j){
+            for ( int j = 0; j<(int)nums.size();++j){
                 long long x= nums[j];
-                // Move the current elment from the rightr side to the current (so k>j only)
+                // Move the current elment from the right side to the current (so k>j only)
                 freqNext[x]--;
                 long long target = x*2;
                 long long prevCount = freqPrev[target];   //hpow many nums[i] ==2*x for i<j
                 long long nextCount = freqNext[target];  //how many nums[k] ==2*x for k>j
 
-                ans = (ans+ (prevCount*nextCount));
+                ans = (ans+(prevCount*nextCount)%MOD)%MOD;
 
                 freqPrev[x]++;  
 
@@ -40,14 +40,10 @@ class Solution{
 };
 
 int main(){
-    int n;
-    cout<<"Enter the number of elements: ";
-    cin>>n;
-    vector<int> nums(n);
-    cout<<"Enter the elements: \n";
-    for(int i = 0; i <n; ++i){
-        cin>>nums[i];
-    }
+   
+    
+    vector<int> nums= {2, 1, 2, 1, 2, 4, 2, 4, 8, 4, 8, 16, 8, 16, 32};
+    
 
     Solution sol;
 
