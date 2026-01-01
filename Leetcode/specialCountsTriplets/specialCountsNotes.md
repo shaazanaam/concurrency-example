@@ -68,3 +68,22 @@ HINT:
     Use Frequency arrays or maps, eg freqPrev and freqNext - to track how many times each value appeards before and after the current index
 
     For each index j in the triplet (i,j,k), compute its contribution to the answer using your freqPrev and freqNext counts.
+
+## Genenral Discussion 
+ This is not a sliding window problem   and then each iterations you would be removing the nums[j] from the right map 
+ 1. Query counts from both sides and then 
+ 2. Add combinations 
+ 3. Insert nums[j] into the left map
+
+  Why this is not a sliding window problem :
+  sliding window requires two pointers that define a contigious range 
+  A window that expands and contracts
+
+There is no window 
+There is no shrinking 
+Only counting across  partitions 
+there is no shrinking 
+Correct classification of this style of problem is :
+
+" this is the frequency based  counting problem where each index is treated as a fixed 
+middle , using prefix and suffix frequency maps"
