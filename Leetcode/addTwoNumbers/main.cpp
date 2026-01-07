@@ -32,7 +32,7 @@ while(current1!=0 || current2!=0 || carry!=0){
       int y = current2 ? current2->val:0;
       int total = x+y+carry;
       ListNode* newNode =  new ListNode(total%10);
-      tail->next = newNode;
+      tail->next = newNode;  // you want the tails next pointer at this time because at this instance the tail is pointing to the current node and not the new node and you want the  currentpointers next node to be pointing to the new node and then you go ahead  and assign the tail itself to point to the new node .
       carry =total/10;
       tail = newNode;
       if (current1!=nullptr )current1 = current1->next;
@@ -44,3 +44,30 @@ return dummy.next;
 
 }
 
+
+int main() {
+    // Create first number: 342 (represented as 2 -> 4 -> 3)
+    ListNode* l1 = new ListNode(2);
+    l1->next = new ListNode(4);
+    l1->next->next = new ListNode(3);
+
+    // Create second number: 465 (represented as 5 -> 6 -> 4)
+    ListNode* l2 = new ListNode(5);
+    l2->next = new ListNode(6);
+    l2->next->next = new ListNode(4);
+
+    // Call your addition function
+    ListNode* result = addTwoList(l1, l2);
+
+    // Print the result
+    while (result != nullptr) {
+        std::cout << result->val;
+        if (result->next) std::cout << " -> ";
+        result = result->next;
+    }
+    std::cout << std::endl;
+
+    // (Optional) Free allocated memory
+
+    return 0;
+}

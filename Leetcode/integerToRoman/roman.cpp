@@ -16,7 +16,7 @@ class Roman {
 
             string res;
             for(auto &p : romanMap){
-                while(nums>=p.first){
+                while(nums>=p.first){  // this is  the logic that greedily finds the largest  roman value that fits the input. 
                     res += p.second;
                     nums -= p.first;
                 }

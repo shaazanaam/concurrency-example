@@ -21,7 +21,7 @@ class MinSubarrayLength {
             while(tempSum>=num){
                   minLen = min(minLen,i-start+1);
                   minStart = start;// storing the start index to help printing it 
-                  minEnd = i;  // stroing the end to help us with the printing of the array and then pass the value so that we can identify it
+                  minEnd = i;      // stroing the end to help us with the printing of the array and then pass the value so that we can identify it
                   tempSum-=arr[start];
                   start++;         // Move the start  pointer forward
             }
