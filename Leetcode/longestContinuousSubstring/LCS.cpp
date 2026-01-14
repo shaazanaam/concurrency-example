@@ -36,7 +36,7 @@ class MaxSubstring {
           
           for(size_t i= 0; i<s.size();i++){
             unsigned char ch = (unsigned char)s[i];
-            int prev = last[ch];
+            int prev = last[ch]; // just doing last ch here creatyes the prev to be 0 here 
             L = max(L,prev+1);
             last[ch] = (int)i;
             longest = max(longest, (int)i-L+1);
