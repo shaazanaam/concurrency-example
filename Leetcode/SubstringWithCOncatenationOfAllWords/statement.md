@@ -98,8 +98,9 @@ Why your cache validated strings in a set idea is risky..
    this is the precise condition 
    Define :
 
-   k = words.length
-   count = number of words currently in the window
+   k = words.length ( which is the number of words we have)
+   count = number of words currently in the window.
+   L = length of each word.
 
    Condition if count ==k AND  invariant holds--> valid concatenation 
 
