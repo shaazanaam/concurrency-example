@@ -11,6 +11,7 @@ class Solution {
             unordered_map<string, int> seen;
             int L = words.empty()? 0:static_cast<int> (words[0].size());
             int left , right =0;
+            vector<int> results;
             // Use a sliding window to check the substrings of length L*k
             //L = length of each word inside the passed vector
             //k = total number of words 
@@ -31,16 +32,31 @@ class Solution {
                     string word = s.substr(right,L);  //Extract the word of length L
                     right +=L;                        // move the right pointer 
                 
-                // update the seen man 
-                if(need.count(word))
-                 seen[word]++;
-                 count++;
+                    // update the seen map 
+                    if(need.count(word)){
+                        seen[word]++;
+                        count++;
+
+                        while(seen[word]>need[word]){
+                            string leftWord = s.substr(left,L);
+                            seen[leftWord]--;
+                            count--;
+                            left +=L;
+                        }
+                        if (count ==words.size()){
+                            results.push_back(left);
+                        }
+
+                    
+                    }
+
                 
                 }
 
                 
 
             }
+            return results;
         }
 };
 

@@ -16,15 +16,26 @@ public:
         //run the sliding window on the given string with the two pointers
 
         int left, right =0;
+        S.clear();
         while(right-left+1<s.size()){
-            S[right]++;
-            right++;
+            
+            
 
-            if(T.count(S[right])){
+            if(T.count(s[right])){
+                S[right]++;
                 
             }
-
-            
+            right++;
+            for (auto &pair: T){
+                while(S[right]>pair.second){
+                    left = right;
+                    left++;
+                    S[s[left]]--;
+                }
+                
+                
+            }
+    
         }
     }
 };
