@@ -22,12 +22,12 @@ public:
             
 
             if(T.count(s[right])){
-                S[right]++;
+                S[s[right]]++;
                 
             }
             right++;
             for (auto &pair: T){
-                while(S[right]>pair.second){
+                while(S[s[right]]>=pair.second){
                     left = right;
                     left++;
                     S[s[left]]--;
