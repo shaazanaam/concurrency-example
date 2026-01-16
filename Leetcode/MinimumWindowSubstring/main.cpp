@@ -8,6 +8,7 @@ public:
     string minWindow(string s, string t) {
         
         unordered_map<char, int> T;
+        unordered_map<char, int> S;
         // built the frequency table for the string t
         for(char target: t){
             T[target]++;
@@ -16,7 +17,14 @@ public:
 
         int left, right =0;
         while(right-left+1<s.size()){
-            if(T.count(right)
+            S[right]++;
+            right++;
+
+            if(T.count(S[right])){
+                
+            }
+
+            
         }
     }
 };
