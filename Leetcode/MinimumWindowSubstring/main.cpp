@@ -1,29 +1,45 @@
+
 #include <iostream>
 #include <vector>
 #include <unordered_map>
 
 using namespace std;
-class Solution {
+class Solution
+{
 public:
-    string minWindow(string s, string t) {
-        
+    string minWindowNaive(string s, string t)
+    {
+
         unordered_map<char, int> T;
         unordered_map<char, int> S;
         // built the frequency table for the string t
-        for(char target: t){
+        for (char target : t)
+        {
             T[target]++;
         }
-        //run the sliding window on the given string with the two pointers
 
-        int left=0; int  right =0;
+        // run the sliding window on the given string with the two pointers
+
+        int left, right =0;
         S.clear();
-        while(right
-            <s.size()){
-            //EXPANDING THE RIGH POINTER TO INCLUDE CHARACTERS IN THE WINDOW AND CONTRACTING THE LEFT POINTER TO MINIMIZE THE WINDOW .
-
-
-
+        while(right-left+1<s.size()){
             
+            
+
+            if(T.count(s[right])){
+                S[s[right]]++;
+                
+            }
+            right++;
+            for (auto &pair: T){
+                while(S[s[right]]>=pair.second){
+                    left = right;
+                    left++;
+                    S[s[left]]--;
+                }
+                
+                
+            }
     
         }
     }
