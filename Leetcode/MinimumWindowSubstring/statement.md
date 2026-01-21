@@ -99,3 +99,204 @@ When solving a new problem, ask:
 8. Think in Terms of State
 The window’s state is defined by your counters and maps.
 Validity is a property of the state, not of a full scan.
+
+
+Here’s a side‑by‑side mapping of your approach vs his, with the “missing leap” you didn’t think of, in coach style and visualization‑focused:
+
+1) Frequency tracking
+You: Two hash maps (T and S)
+Him: One fixed array need[128]
+
+Coach insight:
+He collapses both “target” and “window” into one array.
+
+Positive value = still need this character
+Zero = exactly satisfied
+Negative = extra in window
+This removes one entire structure and cuts overhead.
+2) Validity condition
+You: Track matchedCount vs T.size() (unique chars matched)
+Him: Track required = total characters left (including duplicates)
+
+Coach insight:
+This is the big conceptual shift.
+Instead of “How many unique characters are matched?”, he asks:
+“How many total characters are still missing?”
+This removes the duplicate complexity entirely and avoids scanning T.
+
+3) Expand window
+You: Add char → compare against T → update matchedCount
+Him: Add char → if need > 0 then required-- → need--
+
+Coach insight:
+He uses the state of the need array to decide instantly if a character was actually needed.
+No map lookup + no loop. Just O(1) transition.
+
+4) Shrink window
+You: If valid, shrink; adjust matchedCount if dropping below
+Him: If valid (required==0), shrink; if need++ becomes >0 then required++
+
+Coach insight:
+He uses the same “need array” to detect exactly when the window becomes invalid again.
+No separate logic for duplicates—just one invariant.
+
+5) Minimal window update
+You: Update when window valid
+Him: Same, but validity is O(1)
+
+Coach insight:
+You both do the right idea, but he made validity check constant time.
+
+What You Didn’t Think Of (The Core Mental Leap)
+He treats the target frequency array as a “debt ledger.”
+
+If need[c] > 0: you still owe c
+When you take a character, you pay off debt
+When you give a character back (shrink), debt increases
+required is the total debt remaining
+Visualization:
+You’re balancing a budget.
+He never re-checks the full budget; he only updates the balance.
+
+How to Train This Thinking
+Ask: “Can I track a single variable instead of scanning?”
+Ask: “Can I encode both target + window in one structure?”
+Practice converting “validity = all conditions met” into a single scalar invariant.
+If you want, I can map your current code line‑by‑line to the exact role in his solution and show you where the state compresses.
+
+Single variable: required (remaining total characters needed, including duplicates).
+Single structure: need[128] (starts as target counts, then is updated as the window grows/shrinks, so it represents both target and window state).
+Scalar invariant for validity: required == 0 (all required characters are satisfied).
+
+ There is a template you can use for this kind of problems and then beyond which you can see if in the problem for the subarray sum equals K if you can see it results in the value or not
+
+
+ The code of solving this problem is below. It might be the shortest among all solutions provided in Discuss.
+
+string minWindow(string s, string t) {
+        vector<int> map(128,0);
+        for(auto c: t) map[c]++;
+        int counter=t.size(), begin=0, end=0, d=INT_MAX, head=0;
+        while(end<s.size()){
+            if(map[s[end++]]-->0) counter--; //in t
+            while(counter==0){ //valid
+                if(end-begin<d)  d=end-(head=begin);
+                if(map[s[begin++]]++==0) counter++;  //make it invalid
+            }  
+        }
+        return d==INT_MAX? "":s.substr(head, d);
+    }
+
+     this is the solution to the problem we have had and then this is the template for the proble 
+
+int findSubstring(string s){
+        vector<int> map(128,0);
+        int counter; // check whether the substring is valid
+        int begin=0, end=0; //two pointers, one point to tail and one  head
+        int d; //the length of substring
+
+        for() { /* initialize the hash map here */ }
+
+        while(end<s.size()){
+
+            if(map[s[end++]]-- ?){  /* modify counter here */ }
+
+            while(/* counter condition */){ 
+                 
+                 /* update d here if finding minimum*/
+
+                //increase begin to make it invalid/valid again
+                
+                if(map[s[begin++]]++ ?){ /*modify counter here*/ }
+            }  
+
+            /* update d here if finding maximum*/
+        }
+        return d;
+  }
+One thing needs to be mentioned is that when asked to find maximum substring, we should update maximum after the inner while loop to guarantee that the substring is valid. On the other hand, when asked to find minimum substring, we should update minimum inside the inner while loop.
+
+Below is  the code for solving the Longest Substring with At Most two Distinct Characters is below 
+
+int lenghtOfLongestSubstringTwoDistinct(string s){
+  vector map<int> (128,0);
+  int counter = 0, begin = 0 , end =0, d=0;
+  while (end<s.size()>){
+    if(map[s[end++]]++==0) counter++;
+    while(counter >2) if (map[s[begin++]]--==1) counter --;
+    d= max(d,end-begin);
+  }
+  return d;
+}
+
+int lengthOfLongestSubstring(string s) {
+        vector<int> map(128,0);
+        int counter=0, begin=0, end=0, d=0; 
+        while(end<s.size()){
+            if(map[s[end++]]++>0) counter++; 
+            while(counter>0) if(map[s[begin++]]-->1) counter--;
+            d=max(d, end-begin); //while valid, update d
+        }
+        return d;
+    }
+
+
+1. Use two pointers: start and end to represent a window.
+2. Move end to find a valid window.
+3. When a valid window is found, move start to find a smaller window.
+
+To check if the window is valid we use a map to store the (char. count) for the chars in t . And use the counter  for the numbers of char t to be found in s.
+
+the key part is the map[s[end]]--; we decrease the count for each char in  s . If it doesnt exist in t the  count will be negative.
+ To really understand this algorithm see the code belo 
+ if(map[s[end++]]++>0)  counter++;
+
+ string minWindow(string s, string t) {
+	unordered_map<char, int> m;
+	// Statistic for count of char in t
+	for (auto c : t) m[c]++;
+	// counter represents the number of chars of t to be found in s.
+	size_t start = 0, end = 0, counter = t.size(), minStart = 0, minLen = INT_MAX;
+	size_t size = s.size();
+	
+	// Move end to find a valid window.
+	while (end < size) {
+		// If char in s exists in t, decrease counter
+		if (m[s[end]] > 0)
+			counter--;
+		// Decrease m[s[end]]. If char does not exist in t, m[s[end]] will be negative.
+		m[s[end]]--;
+		end++;
+		// When we found a valid window, move start to find smaller window.
+		while (counter == 0) {
+			if (end - start < minLen) {
+				minStart = start;
+				minLen = end - start;
+			}
+			m[s[start]]++;
+			// When char exists in t, increase counter.
+			if (m[s[start]] > 0)
+				counter++;
+			start++;
+		}
+	}
+	if (minLen != INT_MAX)
+		return s.substr(minStart, minLen);
+	return "";
+}
+
+in a dynamic sliding window there is the conditon given below 
+
+intialize left =0;
+initialize the window_state(sum, count, frequency map, etc)
+initialize min_or_max_result
+
+for right from 0 to arr.length -1:
+  update window_state to include arr[right]  #expand the window
+
+  while window_state violates the condition:
+     update min_orMax_result(if needed)
+     update window_state to exclude arr[left]  # Shrink the window 
+     move left pointer forward
+
+ return min_or_max_result
