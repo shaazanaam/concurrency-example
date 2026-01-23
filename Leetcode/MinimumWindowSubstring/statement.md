@@ -300,3 +300,105 @@ for right from 0 to arr.length -1:
      move left pointer forward
 
  return min_or_max_result
+
+
+
+ while the window state is violating the condition shrink it until it violates the condition and then update the min or max result and then update the window state to exclude the arr[left]
+ that is update the window state and  then the result according ly 
+
+
+  For example if you are given an integer array nums and an integer k find the maximum average of any contiguous subarray of size k 
+
+  [1,12,-5,-6,50,3] k=4
+
+   find  the maximum average of any subarray of size k.
+
+    the brute force in this case will be iterating through  every possible subarray of size k calculating its sum and then determining the maximum sum.
+    After processing all the subarrays divide the maximum sum by k to get the maximum average
+
+## BRUTE FORCE
+    public static double findMaxAverage(int[] nums , int k ){
+      int n = nums.length;
+      int maxSum = Integer.Min_Value;
+       //iterate through all the possible subarrays of length k 
+       for(int i = 0; i<=n-k;i++){
+        int sum = 0;
+        //Calculate the sum of the subarray starting at index i 
+          for (int j = i;j<i+k;j++>){
+            sum+= nums[j];
+          }
+          maxSum = Math.max(maxSum, sum);
+       }
+       return (double) maxSum/k
+
+    }
+
+## SLiding window approach 
+
+    calculate the sum of the first k elements of the window 
+
+    and the add the elements  as you move right and then as you move left you subtract the  element and determine the maxSumn
+
+
+
+    public static double findMaxAverage(int[] nums , int k){
+      int n = nums.length;
+
+      // compute the sum of the first k elements 
+      int sum =0;
+      for(int i =0; i<k ;i++){
+        sum+= nums[i];
+      }
+      //intialize the maxSum as the sum of the first window 
+      int maxSum = sum;
+
+      //Slide the window across the array
+
+      for(int i = k ;i<n; i++){
+        sum -=num[i];;  remove elements leaving the window
+        sum += nums[i-k]; // add new elements entering the window 
+
+        // you can find the left most elements by going back k positions later
+        maxSum = Math.max(maxSum, sum);   // update the maxSum 
+      }
+
+      return (double) maxSum/k;
+    }
+
+    in this case  we  get rid of each element only once which reduces the time complexity to O(n)
+
+##  Given the string find the length of the longest substring that doesnt contain any repeating characters
+
+we will be using a dynamic window which will expand if all the characters are unique and will shrink when the duplicate characters are found...
+
+ Each substring fits into one of the two  categories:
+ 1. it contains only unique characters. in this case we should expand the  window by advancing the right pointer that also contains no duplicates
+ 2. it contains the duplicatess. In this case we should shrink the window by advancing the left pointer until the window no longer contains the duplicate
+
+
+to efficiently check for the duplicate characters we use an uoprdered map or vector..
+
+initialize two pointers left and right to the first character of the string but it will be representing the boundaries of the substring . Both array will be starting at the index 0.
+
+ Use the hashset to store the contents of the current window for a quick look ups of the duplicate.
+ expand the window by moving the right pointer and then add in the  current character to the hash set.
+if the current character is already in the hash set then it indicates a duplicate then you would simply shrink the window by moving the left pointer forward.
+
+ remove the character from the hash set until the duplicate is removed
+
+
+this ensures that the substring remains valid containing only the unique characters
+
+after each adjustment calculate the length of the substring  and update the maximum length if needed 
+
+continue until the right pointer is at the end of the string
+
+  you can use the for loop  to loop over the string with the right pointer 
+  initialize the left pointer to =0 and then also initialize the maxLength =0;
+for loop will be expanding the window one at a time and if duplicate is found  which means that the character already exists in the set  then shrink the window from the left by removing the left most character from the set and then incrementing the left pointer  .
+
+After adjusting the window then add the  current character to the set. calculate the length of the current substring and the update the maxLength if necessary.
+Once the right pointer reaches the end of the string  return the max length .
+
+ The time complexity of  this approach is of the order of n O(n)., Since each character is processed at most twice once when its added to window and once when its removed from the window.
+ The space complexity is of the order of k where k represents the size of the hash set and in the worst case senario the hasset stores all the unique characters of the string
