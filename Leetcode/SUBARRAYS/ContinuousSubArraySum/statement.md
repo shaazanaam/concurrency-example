@@ -3,8 +3,8 @@
 Given an integer array nums and an integer k, return true if the nums has a good subarray or false otherwise
 
 A good subarray is a subarray where 
-its length is at least two 
-and the sum of the elements of the subarray is a multiple of k
+1. its length is at least two 
+2. and the sum of the elements of the subarray is a multiple of k
 
 A sub array is  contiguous part of the array and then an integer x is a multiple of k if there exists an integer n such that x= n*k.
 0 is always a multiple of k
@@ -62,6 +62,39 @@ Constraints:
 4. use a hash map to store the {remainder: index} for the sum%k and if you see the same remainder at two indices atleast 2 apart then the subarray sum between them is a multiple of k
 
 # Concept 
+ The key insight is that if two prefix sums have the same remainder when divided by k, the subarray between those two indices has a sum that is a multiple of k 
+
+Let sum1 and sum2 be the cumulative sums at indices i and j respectively, where (j > i).
+            If:
+            [
+            sum1 % k = sum2 % k
+            ]
+            Then:
+            [
+            sum2 - sum1 = n \cdot k
+            ]
+for some integer (n), meaning the subarray sum between indices (i+1) and (j) is a multiple of (k).
+
+ You will be tracking the remainders and using the hash map to store the first index where each remainder from the sum%k occurs and if the same remainder is seen again at a later index then it means that the subarray between those indices has a sum that is a multiple of k .
+
+ Special case for k=0
+ If k=0 then check for the subarrays whose sum is exactly 0
+
+ It uses the mathematical properties of a  remainders to determine if a subarray sum is a multiple of k.
+
+ Example Walkthrough:
+Let’s use the example nums = [23, 2, 4, 6, 7] and k = 6:
+
+Initialization:
+
+Start with sum = 0 and a hash map remainder = {0: -1} (to handle subarrays starting from index 0).
+Iterate Through the Array:
+
+At index 0: sum = 23, remainder = 23 % 6 = 5. Add {5: 0} to the hash map.
+At index 1: sum = 25, remainder = 25 % 6 = 1. Add {1: 1} to the hash map.
+At index 2: sum = 29, remainder = 29 % 6 = 5. Remainder 5 is already in the hash map at index 0. The subarray [2, 4] (from index 1 to 2) has a sum of 6, which is a multiple of 6.
+Return true.
+ 
  The remainder(sum%k) == 0 only if the cumulative sum up to the current index is a multiple of k
  But for this problem you want to find the subarray ( not necessarily starting from index 0) whose sum is a multiple of k.
 

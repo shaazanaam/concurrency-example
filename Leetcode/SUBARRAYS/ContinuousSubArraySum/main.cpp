@@ -32,5 +32,9 @@ class Solution {
 };
 
 int main(){
+      
+      Solution sol;
+      vector nums {23,2,4,6,7};
+      sol.checkSubarraySum(nums,6);
       return 0;
 }
