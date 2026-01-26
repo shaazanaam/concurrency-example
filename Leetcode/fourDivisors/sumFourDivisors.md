@@ -68,7 +68,7 @@ thats the mathematical fact you already trust
     Does n have a divisor \sqrt{n}   we ask which numbers can be eliminated by the small divisors . Its the same math but in the opposite directions..
 
 Why precomputing the primes upto ✓100000 actually enables us to check efficiently ?
-   this is becasue  when you ask the question if this prime number has one prime factor p such that the remaining factor is also prime?
+    This is becasue  when you ask the question if this prime number has one prime factor p such that the remaining factor is also prime?
     And also if this number a perfect cube of a prime?
     And doing this wihtout recomputing the primality from scratch every time.
     We precompute the primes upto ✓1000000 not to find the primes but to factor numbers upto 10000 so we can recognize the two shapes that give exactly four divisors. That sentence is the corrrelation you need.
@@ -77,7 +77,7 @@ We are not precomputing the primes upto 100000 becasue it was unnecessary and it
 
 
 
-     Why the outer loop stops at i*i<= limit? 
+Why the outer loop stops at i*i<= limit? 
 
      When I am processing i I am asking which numbers need i as their smallest divisor?
      Any number of the form i x k where k< i already has a smaller divisor k so it would have been eliminated when k was processed.
