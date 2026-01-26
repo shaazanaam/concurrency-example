@@ -25,6 +25,25 @@ If sum(A[i:j]) == k, then we can rewrite previous equality in the following ways
 sum(A[:j]) = sum(A[:i]) + k 
 sum(A[:j]) - k = sum(A[:i])
 Therefore, if we already saw value of sum(A[:j]) - k as a cumulative sum sum(A[:i]) for some previous i (which we can check by looking at the hash table), then it means that sum of the subarrary A[i:j] is equal to k and we can increment the counter.
+this is not a sliding window problem as in the case of the sliding window it helps if the  elements are positive when you can always shrink or expand the window to maintain the validity of a property like the sum<=k
+
+
+In this problem the elements can be negative so you cant reliably us a sliding window because shrinking the window  doesnt always decrease the sum
+
+prefixSum +HashMap
+This approach works for any integers (ositive , negative , zero)
+It efficiently finds all the subarrays with the sum k by tracking the cumulative sums and it is not a sliding problem .
+
+
+This problem is commonly categorized under the "Prefix Sum" or "Cumulative Sum with Hash Map" pattern on LeetCode.
+
+You may also see it grouped under:
+
+Hash Map for Subarray Sums
+Subarray Sum with Hashing
+Prefix Sum + Hashing
+It is not a sliding window problem.
+The key pattern is: Prefix Sum + Hash Map to efficiently count subarrays with a given sum.
 
 1. What is a prefixSum?
 A prefixSum at index i is the sum of all the elements from the start up to the index i. It is the actual value of the running sum up to a certain index
@@ -45,9 +64,8 @@ This helps us find the subarrays whose sum is exactly k.
 3. Why initialize the prefixSumCount[0]=1? 
 This means that there is only one way to have a sum of 0 before we start (the empty subarray)
 This is important for the cases where a subarray starting from the index 0 sums to k.
-Meaning that we have seen the sum 0 once before starting the array. its not a boolean (not just true/false) but a count
-If the prefixSumCount[0]=1,
-it means the sum 0 has occured once so far. So the value of the SumCount to have occured once means that the prefixSumCount[0] =1 and that there is one way to have a subarray ending at the current index that sums to k.
+Meaning that we have seen the sum 0 once before starting the array. Its not a boolean (not just true/false) but a count.
+If the prefixSumCount[0]=1, it means the sum 0 has occured once so far. So the value of the SumCount to have occured once means that the prefixSumCount[0] =1 and that there is one way to have a subarray ending at the current index that sums to k.
 The value like the 1 is a count and not a boolean.
 
 4. Why Check the prefixSumCount[sum-k]?

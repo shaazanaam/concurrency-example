@@ -16,7 +16,7 @@ ListNode* addTwoList (const ListNode*  L1 , const ListNode*  L2){
 //dummy head +current pointer for building output
 //the goal of this function is to take the heads of the reversed digit Lists and then sum the digits and then return the Linked list also reversed.
 //even though the parametes are const ListNode* , you will be using the local traversal cursors:
-const ListNode* current1 = L1; // this is the readonly traversal cursor
+const ListNode* current1 = L1; // this is the readonly traversal cursor and a pointer to a const Object
 const ListNode* current2 = L2;
 ListNode  dummy(0);            // dummy is a real node that exists in the memory 
 ListNode* tail = &dummy;       // &dummy which is the addrtess of that node and tail is a pointer that stores that address
