@@ -1,0 +1,1 @@
+[text](../../SUBSTRINGS/longestContinuousSubstring/minSubArrayLen.cpp)

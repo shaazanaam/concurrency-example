@@ -60,27 +60,18 @@ public:
     }
 // By expanding around a center . A palindrome has a center .
     string efficientLongestPalindrome (string s){
-        
-           
+
         string longest;
         for(int i = 0; i<s.size(); i++){
-            
-            
               int L=i, R=i;
               while (L>=0&& R<s.size() && s[L]==s[R]){
-                
-                if((R-L+1>longest.size()))    
+                    if((R-L+1>longest.size()))    
                     longest = s.substr(L,R-L+1);
-
-                L--;
-                R++;
- 
+                    L--;
+                    R++;
                 }
-            
-            
-               L=i; R=i+1;
+              L=i; R=i+1;
               while (L>=0&& R<s.size() && s[L]==s[R]){
-                
                 if((R-L+1>longest.size()))    
                     longest = s.substr(L,R-L+1);
 

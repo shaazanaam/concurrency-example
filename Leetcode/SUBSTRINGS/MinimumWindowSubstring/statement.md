@@ -44,23 +44,20 @@ Mathematically you are moving through all the possible intervals [i,j] in S , bu
 .. This  allows O(1) access to check if the current window meets the requirements
 
 ## GREEDY MINIMIZATION
-  .. once a valid window is found you try to shrink it from the left to find the minimum possible size
+  .. once a valid window is found you try to shrink it from the left to find the minimum possible size.
 
 ## COMPLEXITY ANALYSIS
-  .. The optimal solution should be O(|S| +|T|) since each character is processed at most twice ( once  when expanding, once when contracting).
+.. The optimal solution should be O(|S| +|T|) since each character is processed at most twice ( once  when expanding, once when contracting).
 
-## COMBINATORICS:  COunting occurences and ensuring all the required elements are present 
- Optimization Minimizing the window length 
- Set theory : ENsuring all the elements of the T are covered in the current window.
+## COMBINATORICS:  Counting occurences and ensuring all the required elements are present 
+Optimization Minimizing the window length 
+Set theory : ENsuring all the elements of the T are covered in the current window. You will be translating the problem constraints into mathematical checks
 
-  You will be translating the problem constraints into mathematical checks
+## You made the mistake of checking the per character while looping through the T which is the target string
 
-  ## You had the mistake of checking the per character while looping through the T which is the target string
-
-   This is because you would try to act on the window even if one of the characters are not valid  . Instead you should be acting only 
-   when the entire window of the characters contain all the charaters of T including the duplicates.
-   Per character expansion is not correct becasue you might miss that other required characters are still underrepresented in the window .
-   THe window is only valid if all the S[c] >= T[c] for every c in the T simultaneously
+This is because you would try to act on the window even if one of the characters are not valid. Instead you should be acting only when the entire window of the characters contain all the charaters of T including the duplicates.
+Per character expansion is not correct becasue you might miss that other required characters are still underrepresented in the window .
+The window is only valid if all the S[c] >= T[c] for every c in the T simultaneously
 
    Example :
 
@@ -110,12 +107,14 @@ Him: One fixed array need[128]
 Coach insight:
 He collapses both “target” and “window” into one array.
 
+## Counter Value:
+
 Positive value = still need this character
-Zero = exactly satisfied
-Negative = extra in window
+Zero           = exactly satisfied
+Negative       = extra in window
 This removes one entire structure and cuts overhead.
 2) Validity condition
-You: Track matchedCount vs T.size() (unique chars matched)
+You: Track matchedCount vs T.size() ( chars matched)
 Him: Track required = total characters left (including duplicates)
 
 Coach insight:
@@ -126,7 +125,7 @@ This removes the duplicate complexity entirely and avoids scanning T.
 
 3) Expand window
 You: Add char → compare against T → update matchedCount
-Him: Add char → if need > 0 then required-- → need--
+Him: Add char → if need > 0 (map[s[end++]]-->0) then required--(counter--) → need--
 
 Coach insight:
 He uses the state of the need array to decide instantly if a character was actually needed.
@@ -164,8 +163,8 @@ Ask: “Can I encode both target + window in one structure?”
 Practice converting “validity = all conditions met” into a single scalar invariant.
 If you want, I can map your current code line‑by‑line to the exact role in his solution and show you where the state compresses.
 
-Single variable: required (remaining total characters needed, including duplicates).
-Single structure: need[128] (starts as target counts, then is updated as the window grows/shrinks, so it represents both target and window state).
+Single variable              : required (remaining total characters needed, including duplicates).
+Single structure             :need[128] (starts as target counts, then is updated as the window grows/shrinks, so it represents both target and window state).
 Scalar invariant for validity: required == 0 (all required characters are satisfied).
 
  There is a template you can use for this kind of problems and then beyond which you can see if in the problem for the subarray sum equals K if you can see it results in the value or not
@@ -248,41 +247,41 @@ int lengthOfLongestSubstring(string s) {
 To check if the window is valid we use a map to store the (char. count) for the chars in t . And use the counter  for the numbers of char t to be found in s.
 
 the key part is the map[s[end]]--; we decrease the count for each char in  s . If it doesnt exist in t the  count will be negative.
- To really understand this algorithm see the code belo 
- if(map[s[end++]]++>0)  counter++;
+To really understand this algorithm see the code below 
+if(map[s[end++]]++>0)  counter++;
 
- string minWindow(string s, string t) {
-	unordered_map<char, int> m;
-	// Statistic for count of char in t
-	for (auto c : t) m[c]++;
-	// counter represents the number of chars of t to be found in s.
-	size_t start = 0, end = 0, counter = t.size(), minStart = 0, minLen = INT_MAX;
-	size_t size = s.size();
-	
-	// Move end to find a valid window.
-	while (end < size) {
-		// If char in s exists in t, decrease counter
-		if (m[s[end]] > 0)
-			counter--;
-		// Decrease m[s[end]]. If char does not exist in t, m[s[end]] will be negative.
-		m[s[end]]--;
-		end++;
-		// When we found a valid window, move start to find smaller window.
-		while (counter == 0) {
-			if (end - start < minLen) {
-				minStart = start;
-				minLen = end - start;
-			}
-			m[s[start]]++;
-			// When char exists in t, increase counter.
-			if (m[s[start]] > 0)
-				counter++;
-			start++;
-		}
-	}
-	if (minLen != INT_MAX)
-		return s.substr(minStart, minLen);
-	return "";
+string minWindow(string s, string t) {
+unordered_map<char, int> m;
+// Statistic for count of char in t
+for (auto c : t) m[c]++;
+// counter represents the number of chars of t to be found in s.
+size_t start = 0, end = 0, counter = t.size(), minStart = 0, minLen = INT_MAX;
+size_t size = s.size();
+
+// Move end to find a valid window.
+while (end < size) {
+  // If char in s exists in t, decrease counter
+  if (m[s[end]] > 0)
+    counter--;
+  // Decrease m[s[end]]. If char does not exist in t, m[s[end]] will be negative.
+  m[s[end]]--;
+  end++;
+  // When we found a valid window, move start to find smaller window.
+  while (counter == 0) {
+    if (end - start < minLen) {
+      minStart = start;
+      minLen = end - start;
+    }
+    m[s[start]]++;
+    // When char exists in t, increase counter.
+    if (m[s[start]] > 0)
+      counter++;
+    start++;
+  }
+}
+if (minLen != INT_MAX)
+  return s.substr(minStart, minLen);
+return "";
 }
 
 in a dynamic sliding window there is the conditon given below 

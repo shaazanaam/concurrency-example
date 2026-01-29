@@ -49,8 +49,8 @@ Create a set to keep track of all previously encountered and validated strings. 
 
 This is basically a sliding Window on the word boundaries (aka multi-offset/modular sliding window) + HashMap frequency counting.
 
-Since every word has the same length L you don’t slide 1 char at a time -- you slide L characters at a time and you run the window starting from each offset ..
-And then you run the window starting from each offset 0....L-1.
+Since every word has the same length L you don’t slide 1 char at a time -- you slide L characters at a time and you run the window starting from each offset 0....L-1.
+ 
 
 Why your cache validated strings in a set idea is risky:
 The idea that you are proposing is that you can keep track of all the previously encountered and validated strings. During the sliding window traversal, if a string is already in the set, directly add its index to the result without performing any further checks. This approach will be increasing the memory usage but will allow you to efficiently skip redundant processing which helps in passing the 178/179 test cases.
@@ -63,16 +63,14 @@ Key idea: since every word has the same length L, you don’t slide 1 character 
 1. Memory blow up: Validated substrings are length L*k (can be huge) and there can be O(n) of them which is a lot of memory.
 Copy cost still exists to check the set you still need to create the substring (or compute a hash)--- which is most of the work.
 
-2. Copy cost still exists: To check the set you still need to create the substring (or compute a hash) which is most of the work.
-
-3. Doesn’t fix the real bottleneck. The correct check avoids redundant checks structurally using the word-aligned sliding window. That’s why it passes all the cases cleanly.
+2. Doesn’t fix the real bottleneck. The correct check avoids redundant checks structurally using the word-aligned sliding window. That’s why it passes all the cases cleanly.
 
 SO CACHING IS A BANDAID BUT THE REAL FAANG SOLUTION IS THE MULTI-OFFSET SLIDING WINDOW.
 
 SO THIS IS THE METHODOLOGY FOR THE WORD-ALIGNED SLIDING WINDOW:
 
 Window is [LEFT--RIGHT] moving in the steps of L.
-Seen[word] counts the words inside the current window.
+seen[word] counts the words inside the current window.
 If the seen[word] > need[word] shrink from the left until valid again.
 When the window contains exactly k words, record left.
 
@@ -91,8 +89,8 @@ Scenario is that you add a word at the right and then if you see that the seen[w
 This is the precise condition:
 Define:
 
-k = words.length which is the size of the given vector.
-count = number of words currently in the window.
+k                   = words.length which is the size of the given vector.
+count               = number of words currently in the window.
 
 Condition: if count == k AND invariant holds --> valid concatenation.
 
@@ -114,7 +112,7 @@ Seen == need is the "we found it" moment.
 
 You just can’t have the seen == need as the only invariant as you can have some partial builds while traversing through the window and then you would end up rejecting every one of them.
 For example, when you are building the window you will often have partial matches like the words = ["foo", "bar"] and then your need is the foo = 1 and the bar = 1.
-As you scan you see the bar first and then your seen is only bar and the seen dictionary will be looking like the bar = 1 and the foo = 0. This window is potentially correct and you just haven’t collected all the words yet. So if your invariant required seen == need you’d be forced to reject every partial build which kills sliding window.
+As you scan you see the bar first and then your seen is only bar and the seen dictionary will be looking like the bar = 1 and the foo = 0. This window is potentially correct and you just haven’t collected all the words yet. So if your invariant  required seen == need you’d be forced to reject every partial build which kills sliding window.
 
 Think of the window as the bag you are filling and you are allowed to put a word in the bag up to the limit and if you exceed the limit you remove from the left until the bag is legal again.
 When the bag contains exactly k items it must be the right multiset and then you would be recording it.

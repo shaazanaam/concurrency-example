@@ -74,7 +74,6 @@ The old approach generates all the possible substring for the input string and t
 
 Treat each character as a Center 
     A palindrome has a center . For odd length palindromes the center is a single character . For the even length palindromes the center is between two characters..
-
     So we need to expand around the center .. for each center expand outwards while the characters on both sides are equal 
 
 Track the longest Palindrome :
