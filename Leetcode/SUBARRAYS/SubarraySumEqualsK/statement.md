@@ -69,11 +69,8 @@ This helps us find the subarrays whose sum is exactly k.
 This means that there is only one way to have a sum of 0 before we start (the empty subarray)
 This is important for the cases where a subarray starting from the index 0 sums to k.
 Meaning that we have seen the sum 0 once before starting the array. Its not a boolean (not just true/false) but a count.
-If the prefixSumCount[0]=1, it means the sum 0 has occured once so far. So the value of the SumCount to have occured once means that the prefixSumCount[0] =1 and that there is one way to have a subarray ending at the current index that sums to k.
-The value like the 1 is a count and not a boolean.
-       This initialization is crucial for handling the cases where a subarray starting from the very beginning of the array (index 0) sums to k . Withouht this initialization such subarrays would not be counted correctly
-       Before we start iterating through the array we assume that the cumilative sum has already occured once . This is becasuse the empty subarray has a sum of 0.
-       Suppose at some index i the cumulative sum ( prefix Sum ) is sum . If there exists a previous prefix sum equal to sum-k then the subarray between that previous index and the current index sums to k . Now if the subarray starts from the index 0 the previous prefix sum would be 0. By initializing prefixSumCount[0]=1 we ensure that such subarrays are correctly counted . 
+If the prefixSumCount[0]=1, it means the sum 0 has occured once so far. So the value of the SumCount to have occured once means that the prefixSumCount[0] =1 and that there is one way to have a subarray ending at the current index that sums to k. The value like the 1 is a count and not a boolean. This initialization is crucial for handling the cases where a subarray starting from the very beginning of the array (index 0) sums to k . Withouht this initialization such subarrays would not be counted correctly.Before we start iterating through the array we assume that the cumilative sum has already occured once . This is becasuse the empty subarray has a sum of 0.
+Suppose at some index i the cumulative sum ( prefix Sum ) is sum . If there exists a previous prefix sum equal to sum-k then the subarray between that previous index and the current index sums to k . Now if the subarray starts from the index 0 the previous prefix sum would be 0. By initializing prefixSumCount[0]=1 we ensure that such subarrays are correctly counted . 
 
       Example:
       Consider the array nums = [3, 4, -7, 1, 2, 3] and k = 7.

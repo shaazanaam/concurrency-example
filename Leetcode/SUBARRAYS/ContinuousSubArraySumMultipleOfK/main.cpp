@@ -15,10 +15,14 @@ class Solution {
                         sum += i;
                         int rem = k==0 ? sum:sum%k; // handle the k=0 edge case 
                         if(remainder.count(rem)){
+                              // if  you see the same remainder again and the subarray is at least length 2 you found a valid subarray
                               // check if the subarray length is atleast 2
                               if (n- remainder[rem]>=2) return true;
                         } else {
                               //store the first index where this remainder occurs
+                              // this is where we are tracking the first index where each remainder occurs
+                              // map keeps the earliest index because the second time the remainder occurs it gets processed by the if block
+                              
                               remainder[rem]=n;
                         }
                         
