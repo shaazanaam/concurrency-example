@@ -57,3 +57,12 @@ Update result:
 When is the window in a valid state to update d?
 Should you update inside or outside the while loop?
 Are you looking for maximum or minimum length?
+
+
+## Approach 1 Vs Approach 2
+
+Initialize the map by counting all the characters in the entire string . As you slide the window you decrement from these counts  . Then in this case the counter tracks the characters whose remaining count drops below . The problem is that this doesnt represent the window validity as it only represents how many characters are exhausted from the full string 
+
+# Approach 2 Window only count 
+ Do not initialize the map by counting the  full string but start with the empty map and then as you expand the end you increment the ocunts for the characters entering the window . and as you shring begin you decrement the couonts for the characters leaving the window . 
+ Counter correctly tracks the invalid characters inside the current window .  
