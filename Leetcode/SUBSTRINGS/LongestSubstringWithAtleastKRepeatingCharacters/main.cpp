@@ -10,28 +10,44 @@ than or equal to k  if no such substring exists , return 0 .
 using namespace std;
 
 class Solution{
-    int lenghtOfLongestSubstring(string s, int K){
+    public:
+        int lenghtOfLongestSubstring(string s, int k){
         vector<int> map(128,0);
-        int counter=0; //represents the number of unique characters in the window that have the freq<k ( dont meet the requirements)
-        int begin=0, end=0; //two pointers one point to the tail and one to the head
-        int d;      //the length of the substring
+        int begin=0, end=0; 
+        int atLeastKcount=0;
+        int unique =0;
+        int ans=0;
 
-        for(char c : s) map[c]++;  // counting the frequencies of all the characters in the map
-        while (end<s.size()){
-            if (map[s[end++]]--==K)
-            {
-                counter++;
-            }
-
-            while(counter>0){
-                if(map[s[begin++]]++==K-1)
-                counter--;
+        for (int i =1 ; i <=26;i++){
+            begin =0; end =0; atLeastKcount=0;map.assign(128,0);unique=0;
+            while (end<s.size()){
+                if(map[s[end]]==0) unique++;  // incrementing the unique
+                map[s[end]]++;                 
+                if(map[s[end]]==k) atLeastKcount++; // incrementing the atleastKCount
+                end++;
+                while(unique>i){
+                    if(map[s[begin]]==k)atLeastKcount--; // decrementing the atLeastKCount when you know it was k before and then later on in the next line you would be decreasing the character's count it would be come k-1                                               
+                    map[s[begin]]--;
+                    if(map[s[begin]]==0)unique--;  // decrementing the unique becasue we are checking if the unique is greater than i which makes the window invalid and then we bring the unique count back to i
+                    begin++;
+                
+                    
+                }
+                if(unique==i && atLeastKcount==i){
+                    ans = max(ans,end-begin);
+                }
                 
             }
-            d=  max(d,end-begin);
-            
-        }return d;
+        } return ans;
 
 
     }
 };
+
+int main (){
+
+    Solution sol;
+    sol.lenghtOfLongestSubstring("aaabb",3);
+
+    return 0;
+}

@@ -208,6 +208,7 @@ If sum[j+1] % k == sum[i] % k, then:
 
 sum[j+1] - sum[i] is divisible by k
 So, the subarray from i to j sums to a multiple of k
+
 4. Using a Hash Map
 As you iterate, keep track of the first index where each remainder occurs.
 If you see the same remainder again at index j+1, and the previous index is i, then the subarray from i to j is a multiple of k.

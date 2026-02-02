@@ -18,7 +18,7 @@ class Solution {
             for(int i : nums){
                   sum +=i;
                   
-                  // check if the prefixS
+                  // check if the prefixSun exists then you would be advancing the counter by the same amount as the prefixSumCount
                   if (prefixSumCount[sum-k]>=1) counter+= prefixSumCount[sum-k];
                   prefixSumCount[sum]++;
                   
