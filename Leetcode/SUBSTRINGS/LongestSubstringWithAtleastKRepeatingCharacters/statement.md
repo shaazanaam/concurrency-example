@@ -25,22 +25,26 @@ Initialize hash map:
 What should you count in the first for() loop?
 count the frequencies of the characters in the given string
 Should you count frequencies of characters in s, or something else?
+i think counting the frequencies wont be helping in this case as it will be hard to count.
 
 What is counter?
 
 Does it represent characters that are invalid (freq < k) or **valid** (freq >= k)?
 How many unique characters are in the window that don't meet the k requirement?
 
+ We dont use the counter to represent characters that are invalid but instead we do have unique  characters count which increments and gets tracked once we have the value of the map[s[end]] as zero meaning that the map doesnt have  character yet in it.
+
 
 Expand window ([if(map[s[end++]]-- ?)](http://vscodecontentref/2)):
 
 When you decrement [map[s[end]]](http://vscodecontentref/3), at what value does a character become invalid?
-     when we decrement the map[s[end++]--] the character becomes invalid  when the value of map[s[end]] becomes k-1
+     when we decrement the map[s[end++]--] the character becomes invalid  when the value of map[s[end]] becomes k-1 from k
 
 If a character had k occurrences and you decrement it, it now has k-1 → is it invalid? 
-    yes
+    yes. You do this by checking that the map[s[begin]] is k and then when you shrink under the conditon that the unique values are greater than the number of unique values you are searching for then you know for sure that by doing  the map[s[begin]]-- you would be  bringing the counts for  that character to k-1
+
 Should counter increase or decrease?
-      When this happens then the counter should increase by 1 and (one more invalid character)
+      When this happens then the unicounter should increase by 1 and (one more invalid character)
 Counter condition (while(/* counter condition */)):
 
 When should you shrink the window?
@@ -164,9 +168,20 @@ All i unique characters in the window appear at least k times.
 (Because you increment atLeastKCount only when a character’s count reaches k, and decrement it if it drops below k.)
 
 Why is this a valid answer?
-This means every character in the window meets the problem’s requirement (appears at least k times), and you have exactly i unique characters, so you check if this window is the longest so far.
+This means every character in the window meets the problem’s requirement (appears at least k times), and you have exactly i unique characters, so you check if this window is the longest so far.This is because the question asks us if for any character that character is present in the substring that should actually be appearing atLeastK times
+
 
 Summary
 Shrink: unique > i (too many unique characters, not allowed for this pass)
 Valid window: unique == i && atLeastKCount == i (exactly i unique characters, all appear at least k times)
 This approach ensures you check all possible unique character counts and only consider windows where every character meets the frequency requirement. Let me know if you want a visual walkthrough with an example!
+
+
+The next method which uses the unordered_map<char,pair<int,pair<int,int>>> stores for each characters the following 
+first --> total frequency
+second.first---> first index seen
+second.second---> last index seen
+That nested pair is just a compact footpring (count+ first/last positions) in this code only the frequency and the last index update are used . The positions arent actually leveraged in the algorithms so its mostly uneccesary .
+
+The method first for loops over the  s builds the u with each character's total count and its first/last index and the  second for loop (over unique) tries each possible taget number of distinct characters and runs a sliding window to find the longest valid substring for that target
+
