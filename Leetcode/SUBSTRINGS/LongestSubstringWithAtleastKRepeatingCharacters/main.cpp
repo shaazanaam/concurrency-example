@@ -21,7 +21,7 @@ class Solution{
         for (int i =1 ; i <=26;i++){
             begin =0; end =0; atLeastKcount=0;map.assign(128,0);unique=0;
             while (end<s.size()){
-                if(map[s[end]]==0) unique++;  // incrementing the unique
+                if(map[s[end]]==0) unique++;  // incrementing the unique. 
                 map[s[end]]++;                 
                 if(map[s[end]]==k) atLeastKcount++; // incrementing the atleastKCount
                 end++;
@@ -29,14 +29,11 @@ class Solution{
                     if(map[s[begin]]==k)atLeastKcount--; // decrementing the atLeastKCount when you know it was k before and then later on in the next line you would be decreasing the character's count it would be come k-1                                               
                     map[s[begin]]--;
                     if(map[s[begin]]==0)unique--;  // decrementing the unique becasue we are checking if the unique is greater than i which makes the window invalid and then we bring the unique count back to i
-                    begin++;
-                
-                    
+                    begin++;                    
                 }
                 if(unique==i && atLeastKcount==i){
                     ans = max(ans,end-begin);
-                }
-                
+                }                
             }
         } return ans;
 
@@ -45,9 +42,10 @@ class Solution{
 };
 
 int main (){
-
-    Solution sol;
-    sol.lenghtOfLongestSubstring("aaabb",3);
-
+  Solution sol;
+    std::string s = "aaabbccddeee";
+    int k = 2;
+    int result = sol.lenghtOfLongestSubstring(s, k);
+    std::cout << "Longest substring length: " << result << std::endl;
     return 0;
 }
