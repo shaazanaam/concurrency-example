@@ -76,7 +76,7 @@ Matches the answer.
 
 Brute force approach is Pick a start i then keep a set/map of counts and the extend end j from i->n-1 and then track the disctinct count  each time . If distint==k, increment answer.. the problem is that it checks upto 15 subarrays for the n=5 for n=20000 its ~ 200 million subarrays and will become too slow .so the sliding window is just a way to avoid recounting distinct elements for every subarray..
 
-Key point to notice from the brute force pattern is that for a fixed start i as you extend j the distinct count only stays same or increases and  once it becomes 3 it will  never go back to 2 unless you move i.. that monotonic behavior is what the sliding window exploits. Monotonic behavoiur means that you have one defined boundary where the 
+Key point to notice from the brute force pattern is that for a fixed start i as you extend j the distinct count only stays same or increases and  once it becomes 3 it will  never go back to 2 unless you move i.. that monotonic behavior is what the sliding window exploits. Monotonic behavoiur means that you have one defined boundary 
 
 
 KEY MENTAL TAKEAWAY 
@@ -94,12 +94,12 @@ Start at 4 => 1 sub arrays
 
 
 FLIP THE PERSPECTIVE:::: 
-Instead of fixing th estart lets fix the end...
+Instead of fixing the start lets fix the end...
 Same array( length 5)
 index: 0 1 2 3 4 5
 
 End at  index 0.... Possible starts 0->[0..0]-> 1 subarray
-End at  index 0.... Possible starts 0->[0..1]-> 1 subarray
+End at  index 1.... Possible starts 0->[0..1]-> 1 subarray
 
 What does it mean checking distincts actually mean .. When wew say the number of distinct elements in the window we mean how many different values currently appear at least once in the window. 
 
