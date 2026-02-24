@@ -7,14 +7,13 @@ using namespace std;
 class Solution {
     public :
      int maximumLength(string s ){
-        unordered_map<string,int>  u;
+        
         vector<pair<char,int>> groups;
-         int i =0;
-         int L=0;
+         size_t i =0;        
          string special;
          while(i <s.size()){                    
           char c = s[i];
-          int j = i;
+          size_t j = i;
           while(j<s.size() && s[j]==c) j++;
           groups.push_back({c,j-i});
           i=j;
@@ -22,16 +21,43 @@ class Solution {
          }
 
          // Now for a given L 
-         unordered_map<string, int> u;
-         for(auto& g: groups){
-            if (g.second>=L){
-               // each substring of length L in this group is special 
-               // All are the same so use the string of ch repeated L times
-               string special(L, g.first);
-               u[special]+= g.second-L+1;
-               if(u[special]>=3) L= 
+         int low = 1, high = s.size(), answer = -1;
+         while(low<=high){
+            int mid = (low+high)/2;
+            unordered_map<char,int> freq;
+            for(auto& [ch, cnt]: groups){
+               if(cnt>=mid) freq[ch]+=cnt-mid+1;
             }
-            
+            bool found = false;
+            for(auto&[ch,count]:freq){
+               if(count>=3) found = true;
+            }
+            if(found){
+               answer = mid ;
+               low = mid+1;
+            }else{
+               high = mid-1;
+            }
          }
-     }    
+         return answer;
+  
+     } 
+        
 };
+
+int main(){
+   Solution sol;
+   // string s1 = "aaaa";
+   // cout<<"Test1: "<<sol.maximumLength(s1)<<endl;
+
+   // string s2 = "abcdef";
+   // cout<<"Test 2: "<<sol.maximumLength(s2)<<endl;
+
+   // string s3 = "abcaba";
+   // cout<<"Test 3: "<<sol.maximumLength(s3)<<endl;
+
+   string s4 = "ccc";
+   cout<<"Test4: "<<sol.maximumLength(s4)<<endl;
+
+   return 0 ;
+}
