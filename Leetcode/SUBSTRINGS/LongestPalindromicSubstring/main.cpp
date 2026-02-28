@@ -74,13 +74,10 @@ public:
               while (L>=0&& R<s.size() && s[L]==s[R]){
                 if((R-L+1>longest.size()))    
                     longest = s.substr(L,R-L+1);
-
                 L--;
                 R++;
  
                 }
-          
-            
 
         }
 
