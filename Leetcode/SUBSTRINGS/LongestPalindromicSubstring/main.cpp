@@ -86,6 +86,56 @@ public:
         return longest;    
         
     }
+
+    // Manacher's Algorithm - O(N) complexity
+    string manachersAlgorithm(string s) {
+        if (s.empty()) return "";
+        
+        // Preprocess: add '#' between characters
+        string processed = "#";
+        for (char c : s) {
+            processed += c;
+            processed += '#';
+        }
+        
+        int n = processed.length();
+        vector<int> radius(n, 0);  // Palindrome radius at each center
+        int center = 0;             // Center of rightmost palindrome
+        int rightmost = 0;          // Rightmost boundary
+        int maxRadius = 0;
+        int maxCenter = 0;
+        
+        for (int i = 0; i < n; i++) {
+            int mirror = 2 * center - i;
+            
+            // Use previously calculated values if within boundary
+            if (i < rightmost) {
+                radius[i] = min(rightmost - i, radius[mirror]);
+            }
+            
+            // Expand around center
+            while (i + radius[i] + 1 < n && i - radius[i] - 1 >= 0 &&
+                   processed[i + radius[i] + 1] == processed[i - radius[i] - 1]) {
+                radius[i]++;
+            }
+            
+            // Update rightmost boundary and center
+            if (i + radius[i] > rightmost) {
+                center = i;
+                rightmost = i + radius[i];
+            }
+            
+            // Track longest palindrome
+            if (radius[i] > maxRadius) {
+                maxRadius = radius[i];
+                maxCenter = i;
+            }
+        }
+        
+        // Extract palindrome from original string
+        int start = (maxCenter - maxRadius) / 2;
+        return s.substr(start, maxRadius);
+    }
    
 
     
