@@ -66,6 +66,6 @@ class Solution {
 
 int main(){
     Solution solver;
-    cout<<solver.countSubstrings("abc");
-    cout<<solver.countSubstrings("aaa");
+    cout<<solver.countSubstrings2("abc");
+    cout<<solver.countSubstrings2("aaa");
 }
