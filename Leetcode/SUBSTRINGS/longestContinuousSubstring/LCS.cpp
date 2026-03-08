@@ -8,13 +8,14 @@ class MaxSubstring {
         int maxSubstringLength(string s){
           // track the last index
           // intialize a  vector of 256 elements and then intialize each of them to -1
+          // this vector will  be containing the index of the characters as you iterate  throught the string and then  it can also allow you to see the last seen character of the character
           vector<int> last(256,-1);
           
-          int L=0;
+          int L=0;        // L is the left window index 
           int best = 0;
-          for( size_t R= 0 ; R<s.size();++R){
+          for( size_t R= 0 ; R<s.size();++R){    // R is representing the Right window
             
-            int prev = last[(unsigned char) s[R]];
+            int prev = last[(unsigned char) s[R]];// prviously seen index
             if (prev>=L) {
                   L= prev+1;
                  

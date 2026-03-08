@@ -40,9 +40,7 @@ public:
                 left++;
             }
             right++;
-            
-                
-                
+  
         }
         if(minLen>s.size()) return"";
         return s.substr(start,minLen);

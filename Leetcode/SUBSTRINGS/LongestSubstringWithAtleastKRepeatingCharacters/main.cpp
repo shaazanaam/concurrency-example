@@ -31,8 +31,7 @@ class Solution{
                     map[s[begin]]--;
                     if(map[s[begin]]==0)unique--;  // decrementing the unique becasue we are checking if the unique is greater than i which makes the window invalid and then we bring the unique count back to i
                     begin++;
-                
-                    
+
                 }
                 if(unique==i && atLeastKcount==i){
                     ans = max(ans,end-begin);

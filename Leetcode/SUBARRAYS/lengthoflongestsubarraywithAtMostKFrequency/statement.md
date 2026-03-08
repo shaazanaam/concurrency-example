@@ -82,6 +82,7 @@ the problem is about the frequency of the elements and not thenumber of distinct
  where all the elements are the same or if k is very small like = 1 and large arrays with diverse elements 
 
  Focus on the frequency instead of the distinct and then ensure that the logic equality checks the frequency of each element in the window .  Use the frequency map to validate the conditon and then add  pront statement to log the state of the window and the frequency map and the current ans at each step this will help you identify where the logic might deviate from the expected behavior
- Iterative refinement approach needs to be adhered to in that if you find a bug isolate the failing case and refine your logic step by step and focus on the understanding of the why the bug occurs rather than just fixing it 
+ Iterative refinement approach needs to be adhered to in that if you find a bug isolate the failing case and refine your logic step by step and focus on the understanding of the why the bug occurs rather than just fixing it ..
+ My guess is the the in the method you   have used below the distinct is going to be not necessary
 
  

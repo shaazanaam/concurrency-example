@@ -34,24 +34,27 @@ s and t consist of uppercase and lowercase English letters.
  
 
 Follow up: Could you find an algorithm that runs in O(m + n) time?
+ 
+## windoW substring
+ In the context of the window substring a window referes to a contiguous segment (substring) of the source string S. The term window is used because during the algorithm you use two pointers (often called the left and the right ) to define the current range of characters you are considering . As you move these pointers you slide the window across the string to find the smallest substring that contains all the characters of T including the duplicates)
 
 ## SLIDING WINDOW
 Another Key concept is the sliding window  which is a two pointer approach and one pointer expands the window(right), the other contracts it (left) 
-Mathematically you are moving through all the possible intervals [i,j] in S , but efficiently.
+Mathematically you are moving through all the possible intervals [i,j] in S , but efficiently. You will be minimizing the (j-i+1)
 
 ## HASH MAPS /Arrays
 .. to store character frequencies you will be using the hash map or the array.
 .. This  allows O(1) access to check if the current window meets the requirements
 
 ## GREEDY MINIMIZATION
-  .. once a valid window is found you try to shrink it from the left to find the minimum possible size.
+.. once a valid window is found you try to shrink it from the left to find the minimum possible size.
 
 ## COMPLEXITY ANALYSIS
 .. The optimal solution should be O(|S| +|T|) since each character is processed at most twice ( once  when expanding, once when contracting).
 
 ## COMBINATORICS:  Counting occurences and ensuring all the required elements are present 
 Optimization Minimizing the window length 
-Set theory : ENsuring all the elements of the T are covered in the current window. You will be translating the problem constraints into mathematical checks
+Set theory : Ensuring all the elements of the T are covered in the current window. You will be translating the problem constraints into mathematical checks
 
 ## You made the mistake of checking the per character while looping through the T which is the target string
 
@@ -59,17 +62,17 @@ This is because you would try to act on the window even if one of the characters
 Per character expansion is not correct becasue you might miss that other required characters are still underrepresented in the window .
 The window is only valid if all the S[c] >= T[c] for every c in the T simultaneously
 
-   Example :
+Example :
 
-   Suppose the T="AAB" and you window currently has S['A'] = 2 and S['B'] =0 if you check only S['A'] >= T['A'] then you might think that the window is  valid for A but its not valid for 'B' 
-   You  must check all the characters in T before deciding the window is valid and can be shrunk .
+Suppose the T="AAB" and you window currently has S['A'] = 2 and S['B'] =0 if you check only S['A'] >= T['A'] then you might think that the window is  valid for A but its not valid for 'B' 
+You  must check all the characters in T before deciding the window is valid and can be shrunk .
 
-   After expanding right you must check the following 
-        ∀c∈T:S[c]≥T[c]
-  Only if this is true you can try to shrink or expand the window 
+After expanding right you must check the following 
+    ∀c∈T:S[c]≥T[c]
+Only if this is true you can try to shrink or expand the window 
 
 
-  ## Optimized method with the O(m+n) 
+## Optimized method with the O(m+n) 
 
    For every movement of the right or the left  pointer you have to loop through the entire T in order to check if the entire window is valid . Instead you can keep a counter of how many required characters are "fully matched" in the window. Only when  all are matched do you try to shrink the window .  This can avoid the repeated full scan of the T for every window move.
 
