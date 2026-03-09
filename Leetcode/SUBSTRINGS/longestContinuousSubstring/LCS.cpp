@@ -8,7 +8,9 @@ class MaxSubstring {
         int maxSubstringLength(string s){
           // track the last index
           // intialize a  vector of 256 elements and then intialize each of them to -1
-          // this vector will  be containing the index of the characters as you iterate  throught the string and then  it can also allow you to see the last seen character of the character
+          // this vector will  be containing the index of the characters as you iterate 
+          // throught the string and then  it can also allow you to 
+          // see the last seen index of the character
           vector<int> last(256,-1);
           
           int L=0;        // L is the left window index 
