@@ -22,9 +22,7 @@ public:
 
             }
             last[(unsigned char) s[R]] = (int) R;
-            
-            
-
+                        
         }
         return partitions;
     }
