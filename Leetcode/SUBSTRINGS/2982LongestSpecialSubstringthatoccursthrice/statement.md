@@ -1,4 +1,4 @@
-2982 Find the longgest Special substring that occures thrice II
+lkmlm2982 Find the longgest Special substring that occures thrice II
 You are given a string s that consists of lower case english letters and a string is called special if it is made up of only a single character for example the string abc is not special and whereas the strings ddd zzz and f are special. Return the length of the longest special substring of s which occurs at least thrice  or -1 if no special substring occurs atleast thrice 
 A substring is a contiguous non empty sequence of characters within a string.
 
@@ -64,7 +64,8 @@ For each group (char,count) you can form a special substring of length L if cnt 
 For example in the (a,3) you can form 3-L+1  substrings of length L(all are the same character)
 
 If L= 2 then the 3-2 +1 = 2 substrings :"aa" and "aa"( overlapping) 
-You count for each character and length , how many times such substrings appear in the whole string( across all groups)
+ ## This is what you do 
+ You count for each character and length , how many times such substrings appear in the whole string( across all groups)
 
 ## WHY DOES THIS GIVE YOU THE RIGHT ANSWER
 Because you are counting all the possible special substrings of Length L ( for each character) in the string.
@@ -74,9 +75,9 @@ If for any character the total count of its special substrings of length L is at
 Summary Table Example
 For "aaabbbaaa" and L = 2:
 
-Groups: (a,3), (b,3), (a,3)
+Groups: (a,3), (b,2), (a,3)
 For (a,3): 3 - 2 + 1 = 2 substrings "aa"
-For (b,3): 2 substrings "bb"
+For (b,2): 2- 2 + 1 =  1 substrings "bb"
 For (a,3): 2 substrings "aa"
 Total "aa" substrings: 2 + 2 = 4
 Since "aa" appears 4 times (≥ 3), L = 2 is valid.
