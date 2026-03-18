@@ -497,3 +497,83 @@ else
 // answer
 return dp[0][n-1];
 
+## LCS logic ( longest continuous subsequence)
+
+what does the line if(s1[i-1]==s2[j-1]) dp[i][j] = 1+dp[i-1][j-1]; do ?
+
+It suggests you are solving a prefix subproblem and the current last characters of the two prefixes match and so one optimal common subsequence must include that matched character therefor take the best answer from the smaller prefixes and extend it by 1 
+
+if s1[i-1]==s2[j-1] then the dp[i][j] = dp[i-1][j-1] +1 
+ This means that the dp[i-1][j-1] is the longest common subsequence length without those last characters and since those two last characters are equal you can append that character once to the common subsequence so the length increases by exactly 1 and in the palindrome context string vs its reverse this means that you found one more character that can belong to the palindromic subsequence
+
+Let’s do one concrete example using your exact rule.
+
+Take:
+s1 = bbab
+s2 = reverse(s1) = babb
+
+dp[i][j] means:
+LCS length between first i chars of s1 and first j chars of s2.
+
+Now look at a few match cells where your line is used:
+
+if s1[i-1] == s2[j-1], dp[i][j] = 1 + dp[i-1][j-1]
+
+1) i=1, j=1
+- s1[0] = b, s2[0] = b, match
+- dp[1][1] = 1 + dp[0][0] = 1
+
+Interpretation: we found one common character b.
+
+2) i=2, j=3
+- s1[1] = b, s2[2] = b, match
+- dp[2][3] = 1 + dp[1][2]
+- dp[1][2] is already 1, so dp[2][3] = 2
+
+Interpretation: we extend an old common subsequence by one more matching character.
+
+3) i=4, j=4
+- s1[3] = b, s2[3] = b, match
+- dp[4][4] = 1 + dp[3][3]
+- dp[3][3] = 2, so dp[4][4] = 3
+
+Interpretation: one more match extends length 2 to length 3.
+
+So this pattern means:
+- diagonal dp[i-1][j-1] = best answer before using these two current chars
+- +1 = include this newly matched char once in the subsequence length
+
+Why not +2:
+- In LCS, a matched pair across two strings contributes one subsequence character.
+- +2 belongs to the direct palindrome interval DP (same string, two ends), not LCS DP.
+
+
+Great question. Let us draw the DP map for your LCS method (original string vs reversed string).
+
+Example:
+1. s1 = bbbab
+2. s2 = babbb  (reverse of s1)
+
+Meaning of each cell:
+dp[i][j] = LCS length between first i chars of s1 and first j chars of s2
+
+Visual table:
+
+|i\j| 0 | b | a | b | b | b |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| b | 0 | 1 | 1 | 1 | 1 | 1 |
+| b | 0 | 1 | 1 | 2 | 2 | 2 |
+| b | 0 | 1 | 1 | 2 | 3 | 3 |
+| a | 0 | 1 | 2 | 2 | 3 | 3 |
+| b | 0 | 1 | 2 | 3 | 3 | 4 |
+
+How to read this:
+1. Top row and left column are 0 (empty prefix case).
+2. Move left to right, top to bottom.
+3. If chars match, take diagonal + 1.
+4. If chars do not match, take max of top or left.
+
+Final answer is bottom-right cell = 4.
+
+So visually, the numbers grow as matches accumulate, and that bottom-right value is your longest palindromic subsequence length for this string.
