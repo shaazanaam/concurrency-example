@@ -47,6 +47,9 @@ Standard DP is O(s x t) which is too slow for large constrains
 Interval DP on t is also generally too heavy.
 
 
+The basic idea to solve this problem is to know hou much of t I can match from the left and how much of t I can match from the right and combine the left and right matches and then remove the one middle substring of t with the minumum length . remember that the start and the stop of the substring remvoed is what the formula is telling us which is the right- left +1
+
+
 In this case you would be needing to Build a pref array and the the pref[i] = earliest index in s after mactching t[0...i]
 
 Build the suff arry :
