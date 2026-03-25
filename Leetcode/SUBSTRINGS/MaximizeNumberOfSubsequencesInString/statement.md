@@ -6,7 +6,7 @@ Return the maximum number of times the pattern can occur as a subsequence of the
 A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters
 
 
-A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters
+
 
 Example 1:
 
@@ -54,8 +54,8 @@ You have to maintain the order ab which is a must
 ## How to count the existing subsequences efficiently 
 
 Scan left to right 
-1. Keep the countA = number of a seen so far 
-2. When you see b , add countA to answer and this gices the existing subseqiences in the O(n)
+1. Keep the countA = number of 'a' seen so far 
+2. When you see b , add countA to answer and this gives the existing subsequences in the O(n)
 
 
 You made a mistake here with the two if statements in the following code 
@@ -88,7 +88,7 @@ countA — total a's in text
 countB — total b's in text
 Two choices:
 
-1. Insert a at the bginning --every b in the text now has an extra a before it so you gain the countB new subsequences 
+1. Insert a at the beginning --every b in the text now has an extra a before it so you gain the countB new subsequences 
 
 2. Insert b at the end and every a in the text now has an extra b after it so you gain countA new subsequences 
 
@@ -171,6 +171,40 @@ Quick sanity checks:
 text = "abdcdbc", pattern = "ac" gives 4
 text = "aabb", pattern = "ab" gives 6
 text = "aa", pattern = "aa" gives 3, which is correct after one insertion because "aaa" has $\binom{3}{2} = 3subsequences"aa"`
-So the algorithm is good. If you want, I can next help you test it on a few edge cases without writing more code.
 
 
+
+
+This is a **greedy two-character subsequence counting pattern**. Here's what it does:
+
+**The Algorithm:**
+1. **Count subsequences of pattern in text**: As you iterate through the text, whenever you see the second character `b`, add the count of first character `a` you've seen so far to `ogCount`. This counts all `a...b` subsequences.
+
+2. **Optimize with one insertion**: At the end, add `max(countA, countB)` to the result. This represents the benefit of inserting one additional character:
+   - Insert `a` before the string → creates `countB` new subsequences (since all `b`'s can now pair with it)
+   - Insert `b` after the string → creates `countA` new subsequences (since all existing `a`'s can pair with it)
+   - Pick whichever is better
+
+**Example**: For `text="abdcdbc"`, `pattern="ac"`:
+- See `a` → `countA=1`
+- See `b` :nothing
+- See `d` :nothing
+- See `c` → add `1` to result, `ogCount=1` and also countB=1
+- See `d` -> nothing
+- See `b` -> nothing
+- See `a` → `countA=2`
+- See `c` → add `1` to result, `ogCount=2` `countB=2`
+
+After the loop :
+ogCount = 2( existing "ac' subsequences)
+countA = 1 ( total a's)
+countB = 2 ( total 'c's)
+
+Answer 2+ max(1,2) = 2+2 = 4
+
+Insert 'a' at the beginning : Every 'c' can now pair with it -> gain countB (2) new subsequences
+Insert 'c' at the end : Every a can now pair with it ->gain countA (1) new subsequence
+
+The pattern works by optimally choosing whether to add an extra `a` or `b` to maximize the pattern count.
+
+It's an elegant single-pass greedy solution for maximizing subsequence occurrences.
