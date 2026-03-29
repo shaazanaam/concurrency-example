@@ -501,7 +501,7 @@ return dp[0][n-1];
 
 what does the line if(s1[i-1]==s2[j-1]) dp[i][j] = 1+dp[i-1][j-1]; do ?
 
-It suggests you are solving a prefix subproblem and the current last characters of the two prefixes match and so one optimal common subsequence must include that matched character therefor take the best answer from the smaller prefixes and extend it by 1 
+It suggests you are solving a prefix subproblem and if the current last characters of the two prefixes match and so one optimal common subsequence must include that matched character therefor take the best answer from the smaller prefixes and extend it by 1 
 
 if s1[i-1]==s2[j-1] then the dp[i][j] = dp[i-1][j-1] +1 
  This means that the dp[i-1][j-1] is the longest common subsequence length without those last characters and since those two last characters are equal you can append that character once to the common subsequence so the length increases by exactly 1 and in the palindrome context string vs its reverse this means that you found one more character that can belong to the palindromic subsequence

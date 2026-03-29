@@ -52,7 +52,7 @@ The basic idea to solve this problem is to know hou much of t I can match from t
 
 In this case you would be needing to Build a pref array and the the pref[i] = earliest index in s after mactching t[0...i]
 
-Build the suff arry :
+Build the suffix arry :
 suff[i] = latest index in s before matching t[i...m-1] from the right 
 
 Then try splitting the t  in the following manner by keeping the prefix [0..i] and keeping the suffix t [j...m-1], remvoing the t[i+1..j-1]
@@ -78,10 +78,170 @@ the longest common subsequence problem already trained you think the prefix rela
 
 Here we avoid full 2D table and use the  directional matching ( left pass +right pass)
 
+## Understand what the score really means 
+
+The score is the right -left +1 where the left and the right are the main indices of whatever you removed from the t
+
+Key insight : If you are going to remove the characters at the position 2 and 7  then you might as well remove everything in between them too.--- It doesnt increase the score  which still is 7-2+1 =6  but it gives you more characters removed for free. SO in the case of our problem the optimal remove is  always the single contigious block from the t 
+
+this will be then giving the minimum possible score 
+
+t = [ a  b  c  d  e  f  g ]
+            ↑           ↑
+           left        right
+score = right - left + 1
+
+So the problem becomes : find the shortest contigous segment of t to delete so that remaining characters form a subsequence of s 
+
+### Step 2: What does the remaining characters look like after deleting a block ?
+After deleting t[i+1, j-1] you are left with the  prefix and the suffix
+
+[ t[0]  t[1] ... t[i] ]  +  [ t[j]  t[j+1] ... t[j-1] ]
+  ^^^^^ PREFIX ^^^^^           ^^^^^ SUFFIX ^^^^^
+
+For this to be a subsequence of s the prefix must match in the left part of the s and the suffix must match in the right part of the s and critically the left part must end before the right part begins
+
+s = [ ...prefix match ends here... | ...suffix match starts here... ]
+                                   ↑
+                             split point in s
+
+
+### Why build a prefix array ?
+The prefix array answers " if I greedily match match t[0..i] from the left to right in s where do i end up in s ?
+
+prefix[i] = index in s where t[0..i] was matched 
+
+in the below example of the s = "abacaba", t = "bzaa"
+
+Greedy left-to-right matching:
+t[0]='b' → found at s[1]  →  prefix[0] = 1
+t[1]='z' → not found      →  prefix[1] = -1  (match broke here)
+t[2]='a' → ...            →  prefix[2] = -1
+t[3]='a' → ...            →  prefix[3] = -1
+
+After the first successful match   j moves from 0 to 1 so from that point onward the algorithm keeps trying to match only the t[1]  and not t[2] or t[3]. This is exactly how subsequences matching should work.
+## Why ?
+This is because to match t as s subsequence you must match its characters in order which means 
+1. first match t[0]
+2. then match t[1]
+3. then match t[2]
+4. and so on and you are not allowed to try t[2]  before t[1] is matched . So if t[1] never gets matched then the t[2] and the t[3] can never be matched 
+
+So if one required character of t is never found then everything after is also fails as they not only have to match but they have to be matched in order they are appearing in the t 
+
+## So these lines 
+
+t[2]='a' → ... → prefix[2] = -1
+t[3]='a' → ... → prefix[3] = -1
+ 
+
+do not mean the algorithm actively reached t[2] and t[3].
+
+
+
+They only mean:
+
+those positions were initialized as -1
+and they stayed -1
+because j got stuck at 1
+That is the key point.
+
+Intuition
+Think of j as:
+
+"Which character of t am I currently waiting to match?"
+
+After matching 'b', you are waiting for 'z'.
+
+If 'z' never appears in s, then progress stops there.
+
+That is why later entries remain -1.
+
+Short rule to remember
+In subsequence matching:
+
+i scans s
+j scans t
+j moves forward only on a successful match
+if one required character of t is never found, everything after it also fails
+So yes, your reading of the loop is right.
+
+If you want, next I can explain why this same logic makes the suffix array work from the right side too.
+
+
+### Why build the suffix array ?
+The suffix array answers : If I greedily match the t[j..m-1] from the right to left in the s where do I start in s?
+
+Example: s = "abacaba", t = "bzaa"
+
+Greedy right-to-left matching:
+t[3]='a' → found at s[6]  →  suffix[3] = 6
+t[2]='a' → found at s[4]  →  suffix[2] = 4
+t[1]='z' → not found      →  suffix[1] = -1
+t[0]='b' → ...            →  suffix[0] = -1
+
+
+## SPLIT .. which is the combining step and the key insight for the combining step
+
+Now you try every possible split
+
+Keep t[0..i] + Keep t[j..m-1]   →   Remove t[i+1 .. j-1]
+score = j - (i+1) = j - i - 1
+
+For this split to be valid ( valid means that the two halves can actually be matched in s without overlapping)
+
+The conditon shoudl be the following  prefix[i]< suffix[j]
+
+The prefix match in s must end before the suffix match begins.. You want to minimize the j-i-1 which means maximize the i and minimize the j 
+
+### The two pointer slide 
+
+You iterate the j from 0 to m and for each j you want the largest valid i (  where the prefix[i]< suffix[j]). .This is done with the two pointer approach 
+
+for j = 0 to m :
+    while i>=0 and prefix[i] >= suffix[j]:
+        i--  // shrink the prefix until it fits before suffix 
+
+score = min ( score, j-i-1)
+
+
+## The complete picture
+
+t:   [ 0  1  2  3  4  5  6  7  8  9 ]
+                  ↑           ↑
+              keep up to i   keep from j
+              (prefix)        (suffix)
+              
+              DELETE: t[i+1 .. j-1]
+              score = j - i - 1
+
+s:   [==prefix match==][==suffix match==]
+                      ↑
+               prefix[i] < suffix[j]  ← VALID CONDITION
+
+
+
+## Special cases to handle is the following 
+
+1. t is already a subsequence of s which means you should delete nothing and then the score would actually be zero
+2. Delete only a prefix of t which means that keep only the t [i..m-1] only in that case the score is j
+
+3. Delete only a suffix of t which means keep the [0...j] only in that case the score is m-1-i
+
+4. Delete all of t and in this case you would be keeping nothing in which case the score should be m.
+
+
 # How to build syntax from the semantics 
 
-You are asking exactly the right way.  
-You do not need the final solution first. You need a repeatable thinking pattern.
+
+Removing a contiguous block is always optimal — the score formula rewards contiguity.
+The prefix array tells you "how far right in s did I consume while matching the left part of t."
+The suffix array tells you "how far left in s did I start while matching the right part of t."
+A valid combination requires the left part's match to finish before the right part's match begins in s.
+You slide a two-pointer over all splits to find the shortest removable middle block.
+This is essentially a greedy + two-pointer pattern that replaces the expensive O(n×m) DP by precomputing what the best possible left-match and right-match look like independently, then combining them in O(n+m).
+
+
 
 **Core Pattern (in plain words)**  
 For this problem type, think in 3 parts:

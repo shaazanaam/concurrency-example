@@ -30,31 +30,14 @@ class Solution{
             }            
         }
 
-        int answer = m;
-        int rightStart = 0;
 
-        // i is the last kept index in the left part of t.
-        // i == -1 means we keep no left part.
-        for (int i = -1; i < m; ++i) {
-            int leftEnd = -1;
-
-            if (i >= 0) {
-                if (prefix[i] == -1) break;
-                leftEnd = prefix[i];
-                if (rightStart < i + 1) rightStart = i + 1;
-            }
-
-            while (rightStart < m && (suffix[rightStart] == -1 || suffix[rightStart] <= leftEnd)) {
-                ++rightStart;
-            }
-
-            if (rightStart == m) {
-                answer = min(answer, m - (i + 1));
-            } else {
-                answer = min(answer, rightStart - i - 1);
-            }
-        }
-
-        return answer;
     }
 };
+
+int main (){
+    string s = "abacaba";
+    string t = "bzaa";
+    Solution sol;
+    sol.minimumScore(s,t);
+    
+}

@@ -1,6 +1,8 @@
 #include <iostream>
 #include<vector>
 #include <fstream>
+#include <algorithm>
+#include <string>
 using namespace std;
 #define f(i,n) for (int i = 1; i <= n; i++)
 class Solution{
@@ -51,7 +53,7 @@ int main() {
     // Test cases
     cout << "Test 1: \"bbbab\"" << endl;
     cout << "Expected: 4 (bbbb)" << endl;
-    cout << "Result: " << sol.longestPalindromeSubseq("bbbab") << endl << endl;
+    cout << "Result: " << sol.longestPalindromeSubseq("babad") << endl << endl;
     
     cout << "Test 2: \"cbbd\"" << endl;
     cout << "Expected: 2 (bb)" << endl;
