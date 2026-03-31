@@ -255,7 +255,10 @@ So instead of asking
 you ask  
 “How far can I safely match from both sides, and what is the smallest middle gap I must delete?”
 
-That is the pattern.
+That is the pattern.Becasue any set of characters you remove from t the worst case is always captured and by removing everything in one contigious block you never gain by remvoing scattered chaars vs a block of the same length so the question becomes you need to keep some prefix t[0..i]  and some suffix t[j..m-1]
+Remove everything in between t[i+1..j-1]  the score cost is the length of what you removed j-i-1
+
+
 
 ---
 
@@ -445,6 +448,10 @@ and so on
 
 
 
-
-
 ## Next build the suffix array
+
+Suffix tells you if you keep the t[j..m-1] where in s does that suffix start.
+For a valid  split at (i,j) the prefix part must finish before the suffix part begins in s . prefix[i]< suffix[j]
+
+## The split loop - 
+You want to try all the possible split points . you need to go through every valid combination of "how much prefix to keep " ( i from -1 to m-1 where -1 means keep nothing )  
