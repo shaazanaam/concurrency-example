@@ -449,3 +449,83 @@ and so on
 
 
 ## Next build the suffix array
+## Next build the suffix array
+
+Suffix tells you if you keep the t[j..m-1] where in s does that suffix start.
+For a valid  split at (i,j) the prefix part must finish before the suffix part begins in s . prefix[i]< suffix[j]
+
+## The split loop - 
+You want to try all the possible split points . you need to go through every valid combination of :
+"how much prefix to keep " ( i from -1 to m-1 where -1 means keep nothing )  
+"how much suffix to keep"( j from 0 to m where m means keep nothing)
+
+Key edge case to think about:
+1. Keep nothing from prefix , keep all the suffix from the index 0: score = j-0 = number of chars dropped from the left 
+2. Keep the whole prefix up to m-1 drop no siffix : score =0 if fully matched
+3. Keep prefix and suffic where j=i+2 onward score = j-i-1
+
+
+Optimizing tool selection...Perfect, let’s slow it down with one small example.
+
+Take:
+- t = "b z a a"
+- indices: 0 1 2 3
+- m = 4
+
+If you remove a middle block t[L..R], score is its length:
+$$\text{score} = R - L + 1$$
+
+Another equivalent way:
+- keep prefix ending at i (t[0..i])
+- keep suffix starting at j (t[j..m-1])
+- removed block is t[i+1..j-1]
+- score:
+$$\text{score} = j - i - 1$$
+
+Now the edge cases are just special values of i/j.
+
+1. Keep nothing from prefix  
+That means i = -1.
+
+Then removed block becomes t[0..j-1] (drop from left side), and keep t[j..m-1].
+
+Score:
+$$j - (-1) - 1 = j$$
+
+So this means: drop first j characters from t.
+
+Example: j = 2  
+- drop t[0], t[1]
+- keep t[2..]
+- score = 2
+
+That is what “keep nothing from prefix, keep suffix” means.
+
+2. Keep whole prefix, keep no suffix  
+“Keep whole prefix” means i = m-1.  
+“Keep no suffix” means j = m.
+
+Score:
+$$m - (m-1) - 1 = 0$$
+
+So score 0 means you removed nothing.  
+This is only valid if full t is already a subsequence of s.
+
+3. General split in middle  
+Choose i and j with j > i.  
+You keep left part t[0..i] and right part t[j..m-1].  
+Removed part is between them: t[i+1..j-1].  
+Length is:
+$$j - i - 1$$
+
+You wrote “j = i+2 onward” because:
+- if j = i+1, removed length is 0 (nothing removed between them)
+- if j = i+2, removed length is 1 (one char removed)
+- etc.
+
+The only extra rule: the kept prefix match in s must end before kept suffix match in s starts:
+$$\text{prefixPos}[i] < \text{suffixPos}[j]$$
+
+That condition is what makes the split valid in order.
+
+If you want, next I can do one full hand-trace with concrete i/j values and show exactly which characters are removed for each split.

@@ -29,6 +29,27 @@ class Solution{
             --j;
             }            
         }
+        int ans = m; // initializing the ans as the worst case ( remove all of the t)
+        //Case A  keep only the suffix ( remove a left prefix of t)
+        // in this case find the first index k such that the suffix[k] is valid
+        // if the suffix[k]!=-1 then the  then you can keep the t[k..m-1] so the removed length is actually k
+        for(int k =0;k<m;++k){
+            if(suffix[k]!=-1){
+                ans = min(ans,k);
+                break;
+            }
+        }
+
+        // Case B Keep only the prefix ( remove a right suffix of t )
+        //for every matched prefix end i , removed length is m-1-i
+        for(int i =0; i<m;i++){
+            if(prefix[i]!=-1){
+                ans=min(ans,m-1-i);
+            }
+        }
+
+        
+
 
 
     }
