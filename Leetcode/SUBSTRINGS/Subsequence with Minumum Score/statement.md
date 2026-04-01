@@ -180,7 +180,7 @@ t[2]='a' → found at s[4]  →  suffix[2] = 4
 t[1]='z' → not found      →  suffix[1] = -1
 t[0]='b' → ...            →  suffix[0] = -1
 
-
+###### SPLIT 
 ## SPLIT .. which is the combining step and the key insight for the combining step
 
 Now you try every possible split
@@ -449,9 +449,3 @@ and so on
 
 
 ## Next build the suffix array
-
-Suffix tells you if you keep the t[j..m-1] where in s does that suffix start.
-For a valid  split at (i,j) the prefix part must finish before the suffix part begins in s . prefix[i]< suffix[j]
-
-## The split loop - 
-You want to try all the possible split points . you need to go through every valid combination of "how much prefix to keep " ( i from -1 to m-1 where -1 means keep nothing )  
