@@ -30,7 +30,7 @@ class Solution{
             }            
         }
         int ans = m; // initializing the ans as the worst case ( remove all of the t)
-        //Case A  keep only the suffix ( remove a left prefix of t)
+        //Case A  keep only the suffix (remove a left prefix of t)
         // in this case find the first index k such that the suffix[k] is valid
         // if the suffix[k]!=-1 then the  then you can keep the t[k..m-1] so the removed length is actually k
         for(int k =0;k<m;++k){
@@ -48,10 +48,24 @@ class Solution{
             }
         }
 
-        
+        // Keep prefix and the suffix together ( middle removal)
+        // Use two pointers
+        //i for the prefix and j for the suffic 
+        //Move the j only forward so that the total is linear
+        int j2 = 0;
+        for(int i = 0; i<m;i++){
+            if (prefix[i]==-1) break; // this prefix length not matchable 
+            j2= max(j2,i+1); //suffix must start after i in t
+            while(j2<m && (suffix[j2]==-1||suffix[j2]<=prefix[i])){
+                ++j2;
+            }
+            if(j2<m){
+                ans= min(ans, j2-i-1);//removed middle length
+            }
 
+        }
 
-
+    return ans;
     }
 };
 

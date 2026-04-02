@@ -473,14 +473,14 @@ Take:
 - m = 4
 
 If you remove a middle block t[L..R], score is its length:
-$$\text{score} = R - L + 1$$
+        score = R - L + 1$$
 
 Another equivalent way:
 - keep prefix ending at i (t[0..i])
 - keep suffix starting at j (t[j..m-1])
 - removed block is t[i+1..j-1]
 - score:
-$$\text{score} = j - i - 1$$
+        score = j - i - 1
 
 Now the edge cases are just special values of i/j.
 
@@ -489,8 +489,7 @@ That means i = -1.
 
 Then removed block becomes t[0..j-1] (drop from left side), and keep t[j..m-1].
 
-Score:
-$$j - (-1) - 1 = j$$
+Score: j - (-1) - 1 = j
 
 So this means: drop first j characters from t.
 
@@ -506,7 +505,7 @@ That is what “keep nothing from prefix, keep suffix” means.
 “Keep no suffix” means j = m.
 
 Score:
-$$m - (m-1) - 1 = 0$$
+m - (m-1) - 1 = 0
 
 So score 0 means you removed nothing.  
 This is only valid if full t is already a subsequence of s.
@@ -516,16 +515,82 @@ Choose i and j with j > i.
 You keep left part t[0..i] and right part t[j..m-1].  
 Removed part is between them: t[i+1..j-1].  
 Length is:
-$$j - i - 1$$
+j - i - 1
 
-You wrote “j = i+2 onward” because:
+## Keep prefix[i] and suffix[j] where j = i+2 onward: score = j-i-1
 - if j = i+1, removed length is 0 (nothing removed between them)
 - if j = i+2, removed length is 1 (one char removed)
 - etc.
 
 The only extra rule: the kept prefix match in s must end before kept suffix match in s starts:
-$$\text{prefixPos}[i] < \text{suffixPos}[j]$$
+    prefixPos[i] < suffixPos[j]
 
 That condition is what makes the split valid in order.
 
-If you want, next I can do one full hand-trace with concrete i/j values and show exactly which characters are removed for each split.
+## Code 
+Do this in order inside your function after building prefix and suffix.
+
+Initialize answer as worst case (remove all of t)
+
+int ans = m;
+
+Case A: keep only suffix (remove a left prefix of t)
+Find the first index k such that suffix[k] is valid.
+If suffix[k] != -1, then you can keep t[k..m-1], so removed length is k.
+
+for (int k = 0; k < m; ++k) {
+if (suffix[k] != -1) {
+ans = min(ans, k);
+break;
+}
+}
+
+Case B: keep only prefix (remove a right suffix of t)
+For every matched prefix end i, removed length is m - 1 - i.
+
+for (int i = 0; i < m; ++i) {
+if (prefix[i] != -1) {
+ans = min(ans, m - 1 - i);
+}
+}
+
+Case C: keep prefix and suffix together ( middle removal) Use two pointers 
+1. i for the prefix end 
+2. j for the suffix start
+Move j only forward so total is linear 
+int j2 = 0;
+for(int i = 0; i< m; ++i>){
+    if prefix[i] ==-1 break; // this prefix length is not matchable 
+    j2= max(j2,i+1); //suffix must start after i in t 
+    while (j2 < m &&( suffix[j2]==-1 || suffix[j2]<= prefix[i])){
+        ++j2;
+    }
+}
+For a valid split 
+1. in t the suffix must start after the prefix : j>i
+2. In s suffux start must be to the right of the prefix end . suffix[j]>prefix[i]
+
+j2= max(j2, i+1);
+
+i+1 enforces the j2>i in t ( no overlap in the kept parts)
+max(j2,..)  keeps j2 monotonic( never moves backward) giving linear time overall
+
+While ( j2< m && (suffix[j2]<= prefix[i])) {++j2;}
+
+skip invalid suffix starts 
+1. suffix[j2] ==-1 means that the suffix cannot be matched in s 
+2. suffix[j2]<=prefix[i] means suffix begins too early ( or some place) , violating order in s
+
+keep moving j2 until first valid j2 starts
+
+if (j2 < m) { ans = min(ans, j2 - i - 1); }
+
+if such a suffix exists then we can split at the (i,j2)
+and then in this case the remvoed middle is the t[i+1..j2-1] length is the j2-i-1 and then we also minilmize the answer 
+
+Keep left part t[0..i]
+Keep right part t[j2..m-1]
+Delete middle t[i+1..j2-1]
+
+So the loop is 
+" for each left kept part find the the earliest right kept part that is valid in both strings and then compute the deleted middle length
