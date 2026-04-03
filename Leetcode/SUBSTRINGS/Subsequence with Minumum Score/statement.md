@@ -381,7 +381,7 @@ So your understanding should be:
 - Full subsequence only when every character of t is matched in order.
 
 
-## so for combining them and for making sure that the prefix matched part ends before the suffix part starts we need to have nother vector filled or just use the condition where the last index of prefix is actually less than the first index of the suffix like find the index j when prefix[i]!=-1
+## so for combining them and for making sure that the prefix matched part ends before the suffix part starts we need to have another vector filled or just use the condition where the last index of prefix is actually less than the first index of the suffix like find the index j when prefix[i]!=-1
 
 
 You do not need another vector.  

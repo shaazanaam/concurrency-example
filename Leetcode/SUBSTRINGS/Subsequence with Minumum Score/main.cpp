@@ -6,29 +6,35 @@
 using namespace std;
 
 class Solution{
-    public:
-     int minimumScore(string s, string t){
+public:
+    int minimumScore(string s, string t){
         int n = (int)s.size();
         int m = (int)t.size();
         if (m == 0) return 0;
 
-        vector<int> prefix (t.size(),-1);
-        vector<int> suffix (t.size(),-1);
+        vector<int> prefix(m, -1);
+        vector<int> suffix(m, -1);
+
         int j = 0;
-        for(int i = 0 ; i<n && j<m;i++){
-            if (s[i]==t[j])
-            {
-             prefix[j]=i;  // t[j] matched at index i in s
-             ++j;  
+        for (int i = 0; i < n && j < m; ++i){
+            if (s[i] == t[j]){
+                prefix[j] = i;
+                ++j;
             }
         }
-        j = m-1;
-        for(int i = n-1 ; i>=0 && j>=0;i--){
-            if (s[i]==t[j]){
-                suffix[j]=i;  // t[j] matched at index i in s
-            --j;
-            }            
+
+        if (j == m) return 0;
+
+        j = m - 1;
+        for (int i = n - 1; i >= 0 && j >= 0; --i){
+            if (s[i] == t[j]){
+                suffix[j] = i;
+                --j;
+            }
         }
+        int ans = m; // taking ans as the worst case as this is the case where the entire string t is the subsequence
+        
+
         int ans = m; // initializing the ans as the worst case ( remove all of the t)
         //Case A  keep only the suffix (remove a left prefix of t)
         // in this case find the first index k such that the suffix[k] is valid
@@ -69,10 +75,10 @@ class Solution{
     }
 };
 
-int main (){
+int main(){
     string s = "abacaba";
     string t = "bzaa";
+
     Solution sol;
-    sol.minimumScore(s,t);
-    
+    cout << sol.minimumScore(s, t) << endl;
 }
