@@ -32,7 +32,6 @@ public:
                 --j;
             }
         }
-        int ans = m; // taking ans as the worst case as this is the case where the entire string t is the subsequence
         
 
         int ans = m; // initializing the ans as the worst case ( remove all of the t)
@@ -61,12 +60,12 @@ public:
         int j2 = 0;
         for(int i = 0; i<m;i++){
             if (prefix[i]==-1) break; // this prefix length not matchable 
-            j2= max(j2,i+1); //suffix must start after i in t
+            j2= max(j2,i+1); //suffix must start after i in t and this part of the code would be esuring that
             while(j2<m && (suffix[j2]==-1||suffix[j2]<=prefix[i])){
-                ++j2;
+                ++j2;  // skipping the invalid suffix starts and keeping to move the j2 until the first valid j2 starts
             }
             if(j2<m){
-                ans= min(ans, j2-i-1);//removed middle length
+                ans= min(ans, j2-i-1);//removed middle length  that is if  such a  suffix exists then we can split it at the *i,j2
             }
 
         }
