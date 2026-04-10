@@ -50,15 +50,17 @@ Interval DP on t is also generally too heavy.
 The basic idea to solve this problem is to know hou much of t I can match from the left and how much of t I can match from the right and then combine the left and right matches to remove one middle substring of t with the minumum length . remember that the start and the stop of the substring removed is what the formula is telling us which is the right- left +1
 
 
-In this case you would be needing to Build a pref array and the the pref[i] = earliest index in s after mactching t[0...i]
+In this case you would be needing to Build a pref array where the the 
+pref[i] = earliest index in s after matching t[0...i]
 
-Build the suffix arry :
+Build the suffix array :
 suff[i] = latest index in s before matching t[i...m-1] from the right 
 
-Then try splitting the t  in the following manner by keeping the prefix [0..i] and keeping the suffix t [j...m-1], remvoing the t[i+1..j-1]
+Then try splitting the t  in the following manner:
+by keeping the prefix [0..i] and keeping the suffix t [j...m-1], remvoing the t[i+1..j-1]
 
 Valid split condition is that the prefix match in s  ends before suffix match start 
-Minimize remvoed length j-i-1
+Minimize removed length j-i-1
 
 This is essentially the prefix suffix matching + two pointers or binary search and runs in about (s+t) or O(t logt ) much better than full DP 
 
@@ -74,7 +76,7 @@ For this question, convert that thinking into prefix/suffix subsequence matching
 
 So instead of asking what is the full best subsequence you ask how far can i safely match from both sided and what is the smallest middle gap I must delete 
 
-the longest common subsequence problem already trained you think the prefix relation in that what can be matched up to the position i and suffic remation what cn be matched from the position i to end and then combine two partial truths to buld a global truth 
+The longest common subsequence problem already trained you to think the prefix relation in that what can be matched up to the position i and suffix relation in what can be matched from the position i to end and then combine two partial truths to buld a global truth 
 
 Here we avoid full 2D table and use the  directional matching ( left pass +right pass)
 
@@ -84,7 +86,7 @@ The score is the right -left +1 where the left and the right are the main indice
 
 Key insight : If you are going to remove the characters at the position 2 and 7  then you might as well remove everything in between them too.--- It doesnt increase the score  which still is 7-2+1 =6  but it gives you more characters removed for free. SO in the case of our problem the optimal remove is  always the single contigious block from the t 
 
-this will be then giving the minimum possible score 
+This is what  will be then giving the minimum possible score 
 
 t = [ a  b  c  d  e  f  g ]
             ↑           ↑
@@ -99,7 +101,7 @@ After deleting t[i+1, j-1] you are left with the  prefix and the suffix
 [ t[0]  t[1] ... t[i] ]  +  [ t[j]  t[j+1] ... t[j-1] ]
   ^^^^^ PREFIX ^^^^^           ^^^^^ SUFFIX ^^^^^
 
-For this to be a subsequence of s the prefix must match in the left part of the s and the suffix must match in the right part of the s and critically the left part must end before the right part begins
+# For this to be a subsequence of s the prefix must match in the left part of the s and the suffix must match in the right part of the s and critically the left part must end before the right part begins
 
 s = [ ...prefix match ends here... | ...suffix match starts here... ]
                                    ↑
@@ -114,7 +116,7 @@ prefix[i] = index in s where t[0..i] was matched
 in the below example of the s = "abacaba", t = "bzaa"
 
 Greedy left-to-right matching:
-t[0]='b' → found at s[1]  →  prefix[0] = 1
+t[0]='b' → found at s[1]  →  prefix[0] = 1  .. so the index in s where the match has happened is 1 
 t[1]='z' → not found      →  prefix[1] = -1  (match broke here)
 t[2]='a' → ...            →  prefix[2] = -1
 t[3]='a' → ...            →  prefix[3] = -1
@@ -125,7 +127,7 @@ This is because to match t as s subsequence you must match its characters in ord
 1. first match t[0]
 2. then match t[1]
 3. then match t[2]
-4. and so on and you are not allowed to try t[2]  before t[1] is matched . So if t[1] never gets matched then the t[2] and the t[3] can never be matched 
+4. and so on and you are not allowed to try t[2]  before t[1] is matched . So if t[1] never gets matched then the t[2] and the t[3] can never be matched also.
 
 So if one required character of t is never found then everything after is also fails as they not only have to match but they have to be matched in order they are appearing in the t 
 
@@ -135,15 +137,13 @@ t[2]='a' → ... → prefix[2] = -1
 t[3]='a' → ... → prefix[3] = -1
  
 
-do not mean the algorithm actively reached t[2] and t[3].
+---> do not mean the algorithm actively reached t[2] and t[3].
 
 
 
 They only mean:
 
-those positions were initialized as -1
-and they stayed -1
-because j got stuck at 1
+those positions were initialized as -1 and they stayed -1 because j got stuck at 1
 That is the key point.
 
 Intuition
@@ -175,7 +175,7 @@ The suffix array answers : If I greedily match the t[j..m-1] from the right to l
 Example: s = "abacaba", t = "bzaa"
 
 Greedy right-to-left matching:
-t[3]='a' → found at s[6]  →  suffix[3] = 6
+t[3]='a' → found at s[6]  →  suffix[3] = 6  // so I start at the 6th index of s while matching for the suffix
 t[2]='a' → found at s[4]  →  suffix[2] = 4
 t[1]='z' → not found      →  suffix[1] = -1
 t[0]='b' → ...            →  suffix[0] = -1
@@ -190,15 +190,17 @@ score = j - (i+1) = j - i - 1
 
 For this split to be valid ( valid means that the two halves can actually be matched in s without overlapping)
 
-The conditon shoudl be the following  prefix[i]< suffix[j]
+The conditon should  be the following  prefix[i]< suffix[j]
 
 The prefix match in s must end before the suffix match begins.. You want to minimize the j-i-1 which means maximize the i and minimize the j 
 
 ### The two pointer slide 
 
-You iterate the j from 0 to m and for each j you want the largest valid i (  where the prefix[i]< suffix[j]). .This is done with the two pointer approach 
+You iterate the j from 0 to m and for each j you want the largest valid i (  where the prefix[i]< suffix[j]). .This is done with the two pointer approach.  There are two types of two pointer approach and in the below case you as j increases the suffix[j] increases and so the threshold prefix[i]< suffix[j] gets easier to satisfy. Once i is decremented for a small suffix
 
-for j = 0 to m :
+i= last_valid_prefix_idx
+for j = 0 to m-1 :
+    if suffix[j]==-1 continue
     while i>=0 and prefix[i] >= suffix[j]:
         i--  // shrink the prefix until it fits before suffix 
 
