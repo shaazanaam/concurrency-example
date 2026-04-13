@@ -409,11 +409,6 @@ Your sentence is basically correct:
 - yes, you find usable i and j where entries are not -1
 - and enforce prefix end < suffix start
 
-If you want, next we can do one tiny table example with concrete i, j checks so this condition becomes fully intuitive.
-
-
-
-
 
 
 ## Wrong approach 
@@ -446,10 +441,8 @@ prefix[0] = where first char of t got matched in s
 prefix[1] = where second char of t got matched
 and so on
 
-
-
 ## Next build the suffix array
-## Next build the suffix array
+
 
 Suffix tells you if you keep the t[j..m-1] where in s does that suffix start.
 For a valid  split at (i,j) the prefix part must finish before the suffix part begins in s . prefix[i]< suffix[j]
@@ -462,7 +455,7 @@ You want to try all the possible split points . you need to go through every val
 Key edge case to think about:
 1. Keep nothing from prefix , keep all the suffix from the index 0: score = j-0 = number of chars dropped from the left 
 2. Keep the whole prefix up to m-1 drop no siffix : score =0 if fully matched
-3. Keep prefix and suffic where j=i+2 onward score = j-i-1
+3. Keep prefix and suffix where j=i+2 onward score = j-i-1
 
 
 Optimizing tool selection...Perfect, let’s slow it down with one small example.
