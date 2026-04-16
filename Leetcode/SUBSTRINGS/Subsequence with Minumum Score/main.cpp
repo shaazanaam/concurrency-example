@@ -79,21 +79,50 @@ int main() {
     for (int i = n - 1; i >= 0 && j >= 0; --i)
         if (s[i] == t[j]) { suffix[j] = i; --j; }
 
-    cout << "s = " << s << "\n";
-    cout << "t = " << t << "\n\n";
+    cout << "================ VISUAL MAP ================\n";
+    cout << "s (big string where matches happen)\n";
+    cout << "s idx : ";
+    for (int i = 0; i < n; ++i) cout << i << " ";
+    cout << "\n";
+    cout << "s chr : ";
+    for (int i = 0; i < n; ++i) cout << s[i] << " ";
+    cout << "\n\n";
 
-    cout << "idx:    ";
-    for (int i = 0; i < m; ++i) cout << i << "    ";
+    cout << "t (small string we try to keep as subsequence)\n";
+    cout << "t idx : ";
+    for (int i = 0; i < m; ++i) cout << i << " ";
     cout << "\n";
-    cout << "t  :    ";
-    for (int i = 0; i < m; ++i) cout << t[i] << "    ";
+    cout << "t chr : ";
+    for (int i = 0; i < m; ++i) cout << t[i] << " ";
+    cout << "\n\n";
+
+    cout << "prefix array (left to right in s):\n";
+    cout << "value : ";
+    for (int i = 0; i < m; ++i) cout << prefix[i] << " ";
     cout << "\n";
-    cout << "prefix: ";
-    for (int i = 0; i < m; ++i) cout << prefix[i] << "    ";
-    cout << "  <- position in s matched left-to-right\n";
-    cout << "suffix: ";
-    for (int i = 0; i < m; ++i) cout << suffix[i] << "    ";
-    cout << "  <- position in s matched right-to-left\n\n";
+    for (int i = 0; i < m; ++i) {
+        cout << "  t[" << i << "]='" << t[i] << "' ";
+        if (prefix[i] == -1) {
+            cout << "-> no match\n";
+        } else {
+            cout << "-> s[" << prefix[i] << "]='" << s[prefix[i]] << "'\n";
+        }
+    }
+    cout << "\n";
+
+    cout << "suffix array (right to left in s):\n";
+    cout << "value : ";
+    for (int i = 0; i < m; ++i) cout << suffix[i] << " ";
+    cout << "\n";
+    for (int i = 0; i < m; ++i) {
+        cout << "  t[" << i << "]='" << t[i] << "' ";
+        if (suffix[i] == -1) {
+            cout << "-> no match\n";
+        } else {
+            cout << "-> s[" << suffix[i] << "]='" << s[suffix[i]] << "'\n";
+        }
+    }
+    cout << "============================================\n\n";
 
     // two-pointer trace
     cout << "Two-pointer (fix i, advance j2):\n";
