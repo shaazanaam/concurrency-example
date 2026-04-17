@@ -228,3 +228,46 @@ One memory line:
 If you want, I can do one exact 5-step trace with your sample and only show i, j, chosen move, and appended character.
 
 
+# Why are we checking the dp[i-1][j]>=dp[i][j-1]  
+
+dp[i-1][j] = how much LCS overlap remains if you drop the str1[i-1]
+dp[i][j-1] = how much LCS overlap remains if you drop the str2[j-1] 
+You want to keep the path with bigger remaining overlap becasue bigger overlap = more shared characters and that is = shorter final SCS
+
+So if the dp[i-1][j]   is bigger or equal then dropping the str1 is better or same --> move up
+
+# Why push the str1[i-1] when moving up?
+
+Moving up means : Your next subproblem is the (i-1,j) str1[i-1] just left the active window and the SCS must contain every character from both the strings  so you must place the str1[j-1 ] into the answer now before you lose it and then the 
+
+# Memory rule 
+You move away from a cell --> the char at that index gets left behind --> append it immediately and moving up leaves behind str1[i-1] moving left leaves being str2[j-1]
+
+Moving diagonal : both chars are the same and append once leave both behind together. The two characters are equal in the case of the diagonal move . So the single character which is the common one is also the str1[j-1] specifically . You could appeand str2[j-1] instead , it is the same character in this case we usually pick one consistently (often str1[i-1]) just for coding simplpicity and the diagonal means that the match is found and the match found means add once and move both pointers
+
+
+int i = n , j= m
+while(i>0&&j>0){
+  if(str1[i-1]==str2[j-1]){
+    ans.push_back(str1[i-1]);
+    i--;j--;
+  }else if (dp[i-1][j]>=dp[i][j-1]){
+    ans.push_back(str1[i-1]);
+    i--
+  } else {
+    ans.push_back(str2[j-1]);
+    j--;
+  }
+
+  while(i>0){
+    ans.push_back(str[i-1]);
+    i--;
+  }
+  while(j>0){
+    ans.push_back(str2[j-1]);
+    j--;
+  }
+
+  reverse(ans.begin(), ans.end());
+  return ans;
+}
