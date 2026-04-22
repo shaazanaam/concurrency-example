@@ -62,7 +62,7 @@ So (|a| + |b|) is the sum of their lengths.
 ## Why n+1 and m+1 
 Index 0 means empty prefix 
 ..so the row 0 = first string prefix length 0(empty) 
-..col 0 = second string prefix length 0 (empty)
+..col 0        = second string prefix length 0 (empty)
 
 This lets  the base case to be build naturally . 
 ..LCS(empty, anything) = 0
@@ -74,11 +74,11 @@ Real character comparisons starts from the prefixes of length 1
 At the DP cell(i,j)  you are talking about the first i chars of a and the first j chars of b
 
 ## Why compare a[i-1] and b[j-1] ?
-DP index i means prefix length 1. Last character of the prefix length i is at the array indexi-1(0-based indexing in the C++)  Same for the j and the j-1
+DP index i means prefix length i. Last character of the prefix length i is at the array index i-1(0-based indexing in the C++)  Same for the j and the j-1
 
 # intuition for the n+m-dp[n][m]
-Imagine wrriting both the strings fully : total llength n+m
-Overlap as much as possible using common subsequence( LCS) . Overlap ampunt is dp[n][m]  so the shortest merged length is n+m-dp[n][m]
+Imagine writing both the strings fully : total length n+m
+Overlap as much as possible using common subsequence( LCS) . Overlap amount is dp[n][m]  so the shortest merged length is n+m-dp[n][m]
 
 
 
@@ -86,7 +86,7 @@ Great questions. Here is the reconstruction in a short, memory-friendly way.
 
 1. Why use `push_back` on a string?
 - `std::string` is like a dynamic array of `char`.
-- So it supports methods like `push_back(char)` exactly for appending one character.
+-  So it supports methods like `push_back(char)` exactly for appending one character.
 - `push_back` is not only for `vector`; both `vector` and `string` have it.
 
 2. Reconstruction steps

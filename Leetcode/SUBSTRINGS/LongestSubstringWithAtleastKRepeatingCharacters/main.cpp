@@ -1,4 +1,4 @@
-/*
+ /*
 Longest Substring with Atleast K repeating Characters
 Given a string s and an Integer K return the length of the longest substring
 of s such that the frequency of each character in this substring is greater
