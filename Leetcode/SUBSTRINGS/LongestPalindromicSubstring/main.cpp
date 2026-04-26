@@ -16,8 +16,6 @@ public:
     string longest ="";
     // generate the substrings
     vector <string> substrings;
-        
-
     for(size_t i = 0; i<s.size(); i++)
         {
             for(size_t j = i; j<s.size();j++){
