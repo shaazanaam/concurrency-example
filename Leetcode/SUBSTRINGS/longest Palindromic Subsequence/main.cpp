@@ -9,7 +9,7 @@ class Solution{
     public:
         int longestPalindromeSubseq(string s){
           int n= s.size();
-          vector<vector<int>> dp(s.size()+1, vector<int>(n,0));
+          vector<vector<int>> dp(n, vector<int>(n,0));
           // marking all the one characters and the two characetes as palindromes
           for (int i= 0 ; i <s.size(); i++ ){
             dp[i][i]=1;        
