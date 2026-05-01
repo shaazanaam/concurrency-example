@@ -271,3 +271,171 @@ while(i>0&&j>0){
   reverse(ans.begin(), ans.end());
   return ans;
 }
+
+# so far example when in the reconstruct loop with the example of the abac and the cab as the str1 and the str2 we see when the i=4 and j-3 then we compare the LCS using the dp table becasue the characters are not equal while when the characters are equal then we dont check the dp table . I am having a hard time understanding the situation when we check for the string in dp table and when we dont for example in the case of the i=4 andj=3 when the while loop starts we push back c and compare the LCS between the 0aba /0cab which is 2 and the LCS between 0abac/0ca which is 1 and then we drop the str1[i-1] which is 3 and that is "c".. why?
+
+You are very close, and your example is correct. The key distinction is:
+
+1. When chars are equal  
+- `str1[i-1] == str2[j-1]`  
+- No choice needed. This character can be shared by both strings, so for SCS we add it once and move diagonal (`i--, j--`).
+
+2. When chars are different  
+- `str1[i-1] != str2[j-1]`  
+- Now there is a choice, so we consult DP:
+- compare `dp[i-1][j]` (top) vs `dp[i][j-1]` (left)
+- move toward larger LCS value (keeps more common overlap, gives shorter SCS)
+
+For your exact step `(i=4, j=3)`:
+- `str1[3] = 'c'`, `str2[2] = 'b'` mismatch
+- top = `dp[3][3] = 2` (LCS of `"aba"` and `"cab"`)
+- left = `dp[4][2] = 1` (LCS of `"abac"` and `"ca"`)
+- top is larger, so move up to `(3,3)`
+
+Why push `'c'` then?
+- Because moving up means you removed `str1[3]` from the remaining subproblem.
+- If you do not append it now, `'c'` from `str1` would be lost.
+- SCS must contain all chars from both strings in order, so that dropped char must be added.
+
+Short memory rule:
+- Match: no DP compare, take diagonal, add once.
+- Mismatch: DP compare decides direction.
+- Direction tells which char to append:
+  - up => append `str1[i-1]`
+  - left => append `str2[j-1]`
+
+
+Yes, exactly. Tiny visual:
+
+At cell `(i, j)` you are comparing:
+- `str1[0..i-1]`
+- `str2[0..j-1]`
+
+If you move **up** to `(i-1, j)`, the new compared part is:
+- `str1[0..i-2]`
+- `str2[0..j-1]`
+
+So `str1[i-1]` is no longer in the active subproblem.  
+That is why we say it was “dropped” from DP state.
+
+For SCS reconstruction, dropped does not mean deleted from final answer.  
+It means: “not used for future matching path, so append it now to result.”
+
+Your sentence is correct:
+- Moving up means top LCS is at least as good, so we keep that better remaining overlap.
+- But the char we left behind (`str1[i-1]`) must still appear in SCS, so we add it.
+
+
+Use this picture for the exact confusion point.
+
+Let:
+- `str1 = "abac"` (rows, `i`)
+- `str2 = "cab"` (cols, `j`)
+
+`dp[i][j]` means LCS of first `i` chars of `str1` and first `j` chars of `str2`.
+
+### 1. Grid meaning (index view)
+
+```text
+          j=0   1(c)  2(a)  3(b)
+i=0         -     -     -     -
+1(a)        -    dp    dp    dp
+2(b)        -    dp    dp    dp
+3(a)        -    dp    dp    dp
+4(c)        -    dp    dp   [X]  <- current cell (i=4,j=3)
+```
+
+At `X = dp[4][3]`, you are comparing:
+- `str1[3] = 'c'`
+- `str2[2] = 'b'`
+Mismatch.
+
+---
+
+### 2. Two candidate moves from `X`
+
+```text
+          ...   ...   ...   (j=3)
+                         [X] = dp[4][3]
+                         / \
+                        /   \
+          up -> dp[3][3]     dp[4][2] <- left
+```
+
+- Up means new state `(3,3)`
+- Left means new state `(4,2)`
+
+You choose the one with larger LCS value.
+
+In your case:
+- `dp[3][3] = 2`
+- `dp[4][2] = 1`
+So move **up**.
+
+---
+
+### 3. Why moving up means “drop `str1[i-1]`”
+
+Before move (at `(4,3)`), active prefixes are:
+- `str1[0..3] = "abac"`
+- `str2[0..2] = "cab"`
+
+After moving up to `(3,3)`, active prefixes become:
+- `str1[0..2] = "aba"`
+- `str2[0..2] = "cab"`
+
+Notice `'c'` (the old `str1[3]`) is no longer in active row range.
+That is what “dropped from DP state” means.
+
+For SCS, dropped char cannot vanish, so append it now:
+- append `str1[i-1]` (here `'c'`)
+- then do `i--`
+
+---
+
+### 4. One-line memory image
+
+- Move up: row shrinks, so row-char got left behind -> append `str1[i-1]`
+- Move left: col shrinks, so col-char got left behind -> append `str2[j-1]`
+- Move diagonal on match: both shrink together -> append once
+
+If you want, next I can draw the full arrow path for this exact example from `(4,3)` to `(0,0)` so you can see every append step visually.
+You are right to ask for the core proof. Here it is.
+
+At a mismatch state \((i,j)\), you have two valid choices:
+
+1. Go up: append one char from string1, then solve \((i-1,j)\)  
+2. Go left: append one char from string2, then solve \((i,j-1)\)
+
+You want the shorter final SCS, so compare total lengths of these two options.
+
+Let:
+- \(L(a,b)\) = LCS length for that subproblem
+- \(S(a,b)\) = SCS length for that subproblem
+- Identity: \(S = \text{len1} + \text{len2} - L\)
+
+Now compute each choice:
+
+\[
+\text{Up choice length} = 1 + S(i-1,j)
+= 1 + \big((i-1)+j - L(i-1,j)\big)
+= i+j - L(i-1,j)
+\]
+
+\[
+\text{Left choice length} = 1 + S(i,j-1)
+= 1 + \big(i+(j-1) - L(i,j-1)\big)
+= i+j - L(i,j-1)
+\]
+
+Both have the same constant \(i+j\).  
+So the smaller SCS is exactly the one with larger LCS.
+
+That is the core reason for choosing the direction with greater DP value:
+- bigger LCS in the remaining subproblem
+- means more overlap
+- means fewer total characters needed
+- means shorter supersequence
+
+Tie case:
+- if equal, both choices give same minimum SCS length, so either direction is correct.  

@@ -52,3 +52,9 @@ public:
         return ans;
     }
 };
+
+int main(){
+    Solution sol;
+    cout<<" the shortest common supersequence is \n"<<sol.shortestCommonSupersequence("abac","cab");
+
+}
