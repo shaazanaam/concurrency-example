@@ -1,6 +1,7 @@
 #include <iostream>
 #include<vector>
 #include<string>
+#include<algorithm>
 
 
 using namespace std;
@@ -24,11 +25,24 @@ class Solution{
                              subseq+= s[i]; 
                        }
                       }
-                     
-
+                      string rev = subseq;
+                      reverse(rev.begin(),rev.end());
+                      if(subseq==rev){
+                        pallLen[mask]=subseq.length();
+                      }
                   }
+                  int res = 0;
+                  for(auto& m1 : pallLen){
+                        for (auto& m2: pallLen){
+                              if (m1 &m2==0){
+                                    res = max(res,pallLen[m1]* pallLen[m2] );
+                              }
+
+                        }
+                  }
+
                   
-                  return 0;
+                  return res;
             }
 
 };
