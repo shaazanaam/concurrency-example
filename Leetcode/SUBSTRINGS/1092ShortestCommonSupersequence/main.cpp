@@ -37,8 +37,7 @@ public:
             }
 
         }
-
-               // Append leftovers
+        // Append leftovers
         while(i>0){
             ans.push_back(str1[i-1]);
             i--;
@@ -47,7 +46,6 @@ public:
             ans.push_back(str2[j-1]);
             j--;
         }
-
         reverse(ans.begin(),ans.end());
         return ans;
     }

@@ -78,9 +78,7 @@ public:
                 }
 
         }
-
-          
-        
+   
         return longest;    
         
     }
