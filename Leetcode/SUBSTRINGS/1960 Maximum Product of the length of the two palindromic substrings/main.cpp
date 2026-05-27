@@ -39,6 +39,20 @@ public:
             bestEnd[end]=max(bestEnd[end],len);
 
         }
+        //adding two propogation passes for including all the radii for max radius for the odd palindrome
+        // for the bestEnd sweep right to left
+        //use the idea that the neighbor to the left can inherit the length minus 2
+        for(int i =n-1;i>0;i--){
+           if (bestEnd[i]>2){
+            bestEnd[i-1]= max(bestEnd[i-1],bestEnd[i]-2);
+           }
+            
+        }
+        for (int i = 0;i<n-1;i++){
+            if (bestStart[i]>2){
+              bestStart[i+1]= max(bestStart[i+1],bestStart[i]-2);  
+            } 
+        }
         leftBest[0]=bestEnd[0];
         for(int i = 1; i<n;i++){
             
@@ -56,5 +70,40 @@ public:
      return answer;   
 
     
+    }
+
+    long long maxProduct2(string s) {
+        int n = s.length();
+        vector<int> d(n); // Manacher's array for odd palindromes
+        for (int i = 0, l = 0, r = -1; i < n; i++) {
+            int k = (i > r) ? 1 : min(d[l + r - i], r - i + 1);
+            while (0 <= i - k && i + k < n && s[i - k] == s[i + k]) k++;
+            d[i] = k--;
+            if (i + k > r) {
+                l = i - k;
+                r = i + k;
+            }
+        }
+
+        vector<long long> left(n, 1), right(n, 1);
+
+        // Precompute max palindrome length in prefix
+        for (int i = 0, center = 0; i < n; i++) {
+            while (center + d[center] - 1 < i) center++;
+            left[i] = max(i > 0 ? left[i - 1] : 1LL, (long long)(i - center) * 2 + 1);
+        }
+
+        // Precompute max palindrome length in suffix
+        for (int i = n - 1, center = n - 1; i >= 0; i--) {
+            while (center - d[center] + 1 > i) center--;
+            right[i] = max(i < n - 1 ? right[i + 1] : 1LL, (long long)(center - i) * 2 + 1);
+        }
+
+        long long ans = 0;
+        for (int i = 0; i < n - 1; i++) {
+            ans = max(ans, left[i] * right[i + 1]);
+        }
+
+        return ans;
     }
 };
