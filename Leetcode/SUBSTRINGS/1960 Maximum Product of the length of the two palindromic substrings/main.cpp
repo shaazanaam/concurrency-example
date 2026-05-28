@@ -1,7 +1,123 @@
 #include <iostream>
 #include<vector>
+#include <string>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
+
+template <typename T>
+void printVector(const string& name, const vector<T>& v) {
+    cout << setw(12) << left << name << ": [";
+    for (size_t i = 0; i < v.size(); ++i) {
+        cout << v[i];
+        if (i + 1 < v.size()) {
+            cout << ", ";
+        }
+    }
+    cout << "]\n";
+}
+
+void debugMaxProductBuild(const string& s) {
+    int n = static_cast<int>(s.size());
+    if (n == 0) {
+        cout << "Empty string. Nothing to debug.\n";
+        return;
+    }
+
+    vector<int> bestStart(n, 0), bestEnd(n, 0), leftBest(n, 0), rightBest(n, 0);
+    vector<int> radius(n, 0);
+
+    cout << "Input: " << s << "\n";
+    cout << "Index: ";
+    for (int i = 0; i < n; ++i) cout << setw(3) << i;
+    cout << "\nChars: ";
+    for (char c : s) cout << setw(3) << c;
+    cout << "\n\n";
+
+    int L = 0, R = -1;
+    cout << "=== Manacher (odd palindromes) ===\n";
+    for (int i = 0; i < n; i++) {
+        int i_mirror = -1;
+        if (i <= R) {
+            i_mirror = L + R - i;
+            radius[i] = min(radius[i_mirror], R - i + 1);
+        } else {
+            radius[i] = 1;
+        }
+
+        while (i - radius[i] >= 0 && i + radius[i] < n && s[i - radius[i]] == s[i + radius[i]]) {
+            radius[i]++;
+        }
+
+        int start = i - (radius[i] - 1);
+        int end = i + (radius[i] - 1);
+        int len = 2 * radius[i] - 1;
+
+        if (end > R) {
+            L = start;
+            R = end;
+        }
+
+        bestStart[start] = max(bestStart[start], len);
+        bestEnd[end] = max(bestEnd[end], len);
+
+        cout << "i=" << setw(2) << i
+             << "  char='" << s[i] << "'"
+             << "  mirror=" << setw(2) << i_mirror
+             << "  radius=" << setw(2) << radius[i]
+             << "  start=" << setw(2) << start
+             << "  end=" << setw(2) << end
+             << "  len=" << setw(2) << len
+             << "  [L,R]=[" << L << "," << R << "]\n";
+    }
+    cout << "\n";
+
+    printVector("radius", radius);
+    printVector("bestStart", bestStart);
+    printVector("bestEnd", bestEnd);
+    cout << "\n=== Propagation ===\n";
+
+    for (int i = n - 1; i > 0; i--) {
+        if (bestEnd[i] > 2) {
+            bestEnd[i - 1] = max(bestEnd[i - 1], bestEnd[i] - 2);
+        }
+    }
+    for (int i = 0; i < n - 1; i++) {
+        if (bestStart[i] > 2) {
+            bestStart[i + 1] = max(bestStart[i + 1], bestStart[i] - 2);
+        }
+    }
+
+    printVector("bestStart", bestStart);
+    printVector("bestEnd", bestEnd);
+
+    leftBest[0] = bestEnd[0];
+    for (int i = 1; i < n; i++) {
+        leftBest[i] = max(leftBest[i - 1], bestEnd[i]);
+    }
+
+    rightBest[n - 1] = bestStart[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        rightBest[i] = max(rightBest[i + 1], bestStart[i]);
+    }
+
+    cout << "\n=== Prefix/Suffix best arrays ===\n";
+    printVector("leftBest", leftBest);
+    printVector("rightBest", rightBest);
+
+    long long answer = 0;
+    cout << "\n=== Split products ===\n";
+    for (int i = 0; i <= n - 2; i++) {
+        long long cur = 1LL * leftBest[i] * rightBest[i + 1];
+        answer = max(answer, cur);
+        cout << "split after i=" << setw(2) << i
+             << "  leftBest=" << setw(2) << leftBest[i]
+             << "  rightBest=" << setw(2) << rightBest[i + 1]
+             << "  product=" << cur << "\n";
+    }
+    cout << "\nFinal max product (debug pipeline): " << answer << "\n";
+}
 
 class Solution {
 public:
@@ -107,3 +223,24 @@ public:
         return ans;
     }
 };
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    string s;
+    cout << "Enter string (or press Enter for default): ";
+    getline(cin, s);
+    if (s.empty()) {
+        s = "ababbb";
+        cout << "Using default: " << s << "\n";
+    }
+
+    cout << "\n";
+    debugMaxProductBuild(s);
+
+    Solution sol;
+    cout << "\nSolution::maxProduct result: " << sol.maxProduct(s) << "\n";
+    cout << "Solution::maxProduct2 result: " << sol.maxProduct2(s) << "\n";
+    return 0;
+}
