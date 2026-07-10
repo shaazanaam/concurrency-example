@@ -50,3 +50,7 @@ public:
         return ans;
     }
 };
+int main(){
+    Solution sol;
+    cout<<sol.shortestCommonSupersequence("abac","cab");
+}

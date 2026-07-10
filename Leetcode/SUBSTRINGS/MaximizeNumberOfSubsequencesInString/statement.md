@@ -46,7 +46,7 @@ Take the larger result
 
 If you insert a it helps by pairing with every b that appears after it . Earliest position maximizes "after it" so beginning is best 
 
-If you insert b it helps by pairing with every a before it .
+If you insert b at the end it helps by pairing with every a before it .
 
 You have to maintain the order ab which is a must 
 
@@ -100,19 +100,10 @@ ogCount + max(countA, countB)
 You pick whichever insertion gives the bigger gain which is just whichever count( a's or b's) is larger
 
 Also — note your ogCount is int but the problem allows text length up to 
-10
-5
-10 
-5
- . The maximum number of subsequences can be up to 
-≈
-10
-10
-/
-4
-≈10 
-10
- /4, which overflows int. Consider making it long long.
+105
+105
+ . The maximum number of subsequences can be up to ≈1010/4
+≈1010/4, which overflows int. Consider making it long long.
 
 
 You do not actually need to build the new string or perform a real insertion.
@@ -125,6 +116,7 @@ Insert a at the beginning:
 
 new subsequences added = number of existing b
 total becomes ogCount + countB
+
 Insert b at the end:
 
 new subsequences added = number of existing a
@@ -156,7 +148,8 @@ countB ends as total number of pattern[1].
 ogCount + max(countA, countB) correctly models:
 insert a at the front, gain countB
 insert b at the end, gain countA
-It also handles a == b correctly because you do:
+
+# It also handles a == b correctly because you do:
 
 add to ogCount first
 then increment countA
