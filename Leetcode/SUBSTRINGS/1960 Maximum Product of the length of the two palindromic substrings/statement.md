@@ -45,12 +45,13 @@ Precompute palindromic table with DP and the try all the disjoint pairs and this
 You would be using the manacher algorithm to get the palindrom reach information in the linear time 
 Build best palindrome length available up to each prefix and suffix and then combine by split . Manacher gives you for each center how far palindrome expands . From that you know spans and the lengths quickly instead of rechecking characters repeatedly .
 If your statement says odd length palindromes only Manacher odd radius array is exactly what you need 
+
 # Define what the Manacher array means before coding 
-For odd palindromes decide a precise meaning like the radius at the center i tells how many characters you can expand including the center then the palindrome length is at the radius 2*radius-1 . This is being done in the comment forms becasue we do want to avoid the off-by one bugs
+For odd palindromes decide a precise meaning like the radius at the center i tells how many characters you can expand including the center then the palindrome length is at the radius 2*radius-1 . This is being done in the comment forms because we do want to avoid the off-by one bugs
 
 # Keep the semantics clear 
 l  and r track the current right most palindrome window .
-i_mirror is computed from the l and r and the initial radius at i comes from the mirror if i is inside the window .The you would keep  expanding with the while loop and after expansion, if the  new right boundary is farther  than the current interval then you would need to update the l and r.
+i_mirror is computed from the l and r and the initial radius at i comes from the mirror if i is inside the window .Then you would keep  expanding with the while loop and after expansion, if the  new right boundary is farther  than the current interval then you would need to update the l and r.
 
 # Syntax pitfalls to check for the situation 
 While loop must check for the bounds on both the sides before comparing the chars and then the r update usually uses i+ radius-1 for the odd version and then the mirror index formula must match your l,r conventrion and be consistent with the int vs long long for the products later 
@@ -134,7 +135,7 @@ rightBest from the bestStart (suffix max)
 
 # Declare the following variables inside the for loop 
 Start and the end : These are the per center values so declaring them as integers inside the center   loop is correct
-Radius storage: Dont declare the radius vector insidet the loop but declare it once befor the loop with the size n and because you need one radius for every center and you also need earlier values for the mirror reuse
+Radius storage: Dont declare the radius vector inside the loop but declare it once befor the loop with the size n and because you need one radius for every center and you also need earlier values for the mirror reuse
 # You must initialize the L and the R for the Manacher rolling boundary values 
 Why?
 L and R are supposed to be describing the current rightmost palindrome segment that you have already found and are using to speed up the next center . Before you process the first center there is no such segment yet so the window should be invalid or empty.
@@ -179,11 +180,10 @@ Then the expansion loop only checks beyond the guaranteed region
 
 # What goes where
 Outside loop:
-
 radius array
 L and R rolling window boundaries
-Inside loop for each center i:
 
+Inside loop for each center i:
 mirror index
 initial radius for i
 expansion updates
@@ -326,7 +326,7 @@ public:
     
     }
 
-Yes. I should stay in coach mode here.
+
 
 The right way to debug this is not “change random pieces,” but ask what invariant your arrays are supposed to represent, then test whether your current code actually builds those invariants.
 
@@ -391,17 +391,7 @@ So the repair direction is:
 
 That is the core issue I would investigate first before touching anything else.
 
-If you want, next I can help you do one manual dry run on a tiny string and show exactly where your current `bestEnd` construction loses information.
-
-
-
-
-264 x 7
-CODEX
-CHAT
-VECTOR REPRESENTATION IN DYNAMIC PROGRAMMING TABLE
-Yes, that is a strong debugging instinct, but the precise reason matters.
-
+## Problem description
 Your current problem is not that start and end are computed outside the loop.
 The problem is that by computing them only once after expansion finishes, you record only the largest palindrome for that center.
 
@@ -411,19 +401,20 @@ you need to record boundary information for each radius level,
 not only after the final radius is reached.
 That means conceptually the update belongs to the expansion process, not just after it.
 
-Why:
+# Why:
 
 If final radius is 4, then the same center also has valid palindromes for radius 1, 2, 3, and 4
 Each of those has different start/end
 Your current code only records the radius 4 boundary pair
 So the missing information is exactly the smaller layers.
 
-Think of it like peeling an onion in reverse:
+## Think of it like peeling an onion in reverse:
 
 final radius gives outermost layer
 but inner layers are also valid palindromes
 bestStart and bestEnd need all those landing points
-Important nuance:
+
+# Important nuance:
 
 You do not have to literally place the assignment text inside the while
 but you do need a mechanism that records every valid radius, not just the final one
@@ -439,6 +430,7 @@ start = i - (radius - 1)
 end = i + (radius - 1)
 len = 2 * radius - 1
 update bestStart[start] and bestEnd[end]
+
 That is the missing behavior.
 
 So the answer is:
@@ -449,9 +441,10 @@ One caution:
 
 if you literally update only after radius[i]++, be careful not to miss the base radius 1 palindrome.
 every single center already gives a length-1 palindrome.
-So the real invariant you want is:
 
-for every valid radius at center i, reflect its boundaries into bestStart and bestEnd
+# So the real invariant you want is:
+
+For every valid radius at center i, reflect its boundaries into bestStart and bestEnd
 That is the fix direction I would pursue first.
 
 Not just once after the `while` finishes.
@@ -507,7 +500,7 @@ So the answer is:
 - not once after the `while`
 - but once per valid radius, either inside the growth process or in a second loop after you know the max radius
 
-If you want, next I can help you write the exact loop logic in words only, without giving code.
+
 
 Use this exact word-level loop logic after you finish computing the maximum `radius[i]` for one center `i`.
 
@@ -549,7 +542,7 @@ That is the next thing you should implement.
 
 
 
-Yes, that extra loop the way you wrote it makes it $O(n^2)$, and that is not what I meant.
+That extra loop  should not be making it O(n^2) times.
 
 What I meant was the logical idea:
 - one center implies many valid palindromes

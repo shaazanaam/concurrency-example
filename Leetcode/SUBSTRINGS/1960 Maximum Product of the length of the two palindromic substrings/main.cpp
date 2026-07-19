@@ -146,7 +146,7 @@ public:
             start= i-(radius[i]-1);
             end=i+(radius[i]-1);
             int len =2*radius[i]-1;
-            if (end>R){
+            if (end>R){ 
                 L=start;
                 R=end;
             }
@@ -237,7 +237,7 @@ int main() {
     }
 
     cout << "\n";
-    debugMaxProductBuild(s);
+    //debugMaxProductBuild(s);
 
     Solution sol;
     cout << "\nSolution::maxProduct result: " << sol.maxProduct(s) << "\n";

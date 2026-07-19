@@ -23,7 +23,7 @@ class Solution{
                     else {
                         dp[i][j]= max(dp[i+1][j],dp[i][j-1]);
                     }
-                    if(i<n && j>=n && combined[i]==combined[j]){
+                    if(i<n && j>=n && combined[i]==combined[j]){ // here we are making sure that the first character is from word1 and the second character is from word2
                        ans =max(ans,dp[i][j]); 
                     }
                 }
@@ -68,3 +68,12 @@ class Solution{
         return max_pal;
     }
 };
+
+int main(){
+    
+    Solution s;
+    string word1 = "cacb";
+    string word2 = "cbba";
+    
+    cout<<s.longestPalindrome2(word1,word2)<<endl;
+}

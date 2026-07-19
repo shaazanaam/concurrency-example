@@ -98,3 +98,32 @@ One warning
 
 Generating all the subsequence from both words and checking all the pairs is only for understanding and not efficient for length up to 1000 for the real solution use the DP.
 
+# what is the dp?
+1. State dp[i][j] = length of the longest  palindromic subsequence in the combined[i..j] , where combined = word1 + word2
+# valid answer condition os the condition where you update the answer  when both  the subsequence are used 
+if(i<n ** j>=n && combined[i]==combined[j])..
+
+this guarantee comes from the two facts working together 
+1. Boundary split condition 
+i<n means that the index i is inside the word1. j>=n means that the index j is inside the word 2 . so the two ends of the candidate palindrome are taken from different words
+
+2. End point match condition 
+COmbined[i] = combined[j] is required befre updating the ans . when this is true then the DP transition used is the dp[i][j] = dp[i+1][j-1] +2  that +2 explicitly includes both the endpoints i and j in the palindrome length 
+Because i is from the word 1 and j is from the word2, those +2 characters force the palindrome to use at least one character from each word
+the outside boundary is not infered from the len and it is enforced  by the condition j>=n
+
+
+
+## Second Approach 
+In the second approach the outer loop is there  because this is a space optimized dynamic programming sokution and each state depends on the values from the next row.
+
+ In the full 2 D version the recurrence is basically using the information from the substrings that start later in the string . So when the code processes the i from n-1 down to 0 , it guarantees that all the subproblems for a later start index are already available
+
+ Inside the 1 D version the dependencies are ..
+      1. dp[j] before the overwrite represents the values from the previous outer iteration meaning the subproblem for the i+1
+      2. dp[j-1] represents the current rows left neighbor.
+      3. prev stores the old diagonal values which is the old dp[j-1] from the previous row
+
+# the code is using a 1D DP array instead of a 2D table .
+That means that the dp[j] initially represents the old value from the next row meaning dp[i+1][j]
+After updating the dp[j] becomes the current row value dp

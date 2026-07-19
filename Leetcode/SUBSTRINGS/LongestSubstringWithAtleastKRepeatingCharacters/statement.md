@@ -40,7 +40,7 @@ Expand window ([if(map[s[end++]]-- ?)](http://vscodecontentref/2)):
 When you decrement [map[s[begin]]](http://vscodecontentref/3), at what value does a character become invalid?
      when we decrement the map[s[begin++]--] the character becomes invalid  when the value of map[s[begin]] becomes k-1 from k
 
-If a character had k occurrences and you decrement it, it now has k-1 → is it invalid? 
+# If a character had k occurrences and you decrement it, it now has k-1 → is it invalid? 
 Yes. You do this by checking that the map[s[begin]] is k and then when you shrink under the conditon that the unique values are greater than the number of unique values you are searching for then you know for sure that by doing  the map[s[begin]]-- you would be  bringing the counts for  that character to k-1
 
 Should counter increase or decrease?
