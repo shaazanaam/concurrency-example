@@ -128,17 +128,23 @@ public:
         vector<int> bestStart(n,0), bestEnd(n,0),leftBest(n,0),rightBest(n,0);
         vector<int> radius(n,0); // this is the radius array which will be computed from the manacher and be stored inside this vector
         long long answer{};
-        // we will be using the radius values to fill the bestStart best end
-        int L{0},R{-1};// L and R are the intervals for the current best palindrome which we will be getting by converting the radius to them
+        // we will be using the radius values to fill the bestStart and the  bestEnd
+        // L and R are the intervals for the current best palindrome which we will be getting by converting the radius to them
+        int L{0},R{-1};
         for(int i = 0; i<n;i++){
            int i_mirror,start,end;
            if ( i<=R) {
             i_mirror=L+R-i;
+            //while inside the [L,R] you already know some palindrome around i without checking the 
+            //characters so the safe initial radius is min(radius[i_mirror],R-i+1)
             radius[i]=min(radius[i_mirror],R-i+1);
            }
            // with the inital value of the R as R=-1 this conditon takes it to the else directly 
            else radius[i]=1; 
         
+           
+           //Expansion compares the two symmetric positons around i with the boundary checks
+           //on both the sides. While body must include the logic to expand the radius at i .
            while(i-radius[i]>=0 && i+radius[i]<n && s[i-radius[i]]==s[i+radius[i]]){  
                 radius[i]++;    
             }
@@ -230,6 +236,7 @@ int main() {
 
     string s;
     cout << "Enter string (or press Enter for default): ";
+
     getline(cin, s);
     if (s.empty()) {
         s = "ababbb";
@@ -237,7 +244,13 @@ int main() {
     }
 
     cout << "\n";
+<<<<<<< HEAD
     //debugMaxProductBuild(s);
+=======
+    long long ans = Solution().maxProduct(s);
+    debugMaxProductBuild(s);
+>>>>>>> 867b8b5b0a2a66f03534b184a08928f9df87e915
+
 
     Solution sol;
     cout << "\nSolution::maxProduct result: " << sol.maxProduct(s) << "\n";

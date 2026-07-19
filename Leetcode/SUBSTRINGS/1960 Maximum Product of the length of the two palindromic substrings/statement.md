@@ -56,7 +56,7 @@ i_mirror is computed from the l and r and the initial radius at i comes from the
 # Syntax pitfalls to check for the situation 
 While loop must check for the bounds on both the sides before comparing the chars and then the r update usually uses i+ radius-1 for the odd version and then the mirror index formula must match your l,r conventrion and be consistent with the int vs long long for the products later 
 
-# After the Manacher , covert the centers into boundary contributions
+#  After the Manacher , covert the centers into boundary contributions
 ## for each center compute start and end of its max odd palidrome
 ## update structures for best palindrome ending at position and starting at position and 
 ## then do prefix max and suffix max arrays
@@ -99,23 +99,23 @@ radius = 1 means only the center character and the radius = 2 means one match on
 They are the boundaries of the rightmost palindrome window discovered so far
 
 ## Window is [L,R]
-This is the palindrome that currently  reaches the farthest to the right and is used only for the optimization ( mirror reuse)
+This is the palindrome that currently  reaches the farthest to the right and is used only for the optimization (mirror reuse)
 
 # Empty window start state 
 Before any center is processed no known window exists . 
-So initialize to an invalid empty window ( like R befor the first index)
+So initialize to an invalid empty window ( like R before the first index)
 Then for i =0
 i is not inside any known window so no mirror reuse and hence start form base radius and expand normally . This avoids a special case if/else for the first center .
 
 # Inside vs outside window rule 
 For each center i:
-      if i is outside the window then use then start with the base radius ( usually 1 for the odd)
+      if i is outside the window  then start with the base radius ( usually 1 for the odd)
       if i is inside the current window use the mirror index to get a safe starting radius guess.
       Mirror is reflected around the center of [L,R].
       Then always run the  expansion loop to try extending further.
 
 # Why mirror works 
-      Inside the [L,R] palindrome symmetry gives the information from the mirrored center. So you can skip many comparisons and then the intial radius is at least what the mirror guarantees and is capped by the distance to the R boundary/ The expansion loop checks only beyond the guranteed region
+      Inside the [L,R] palindrome symmetry gives the information from the mirrored center. So you can skip many comparisons and then the intial radius is at least what the mirror guarantees and is capped by the distance to the R boundary/ The expansion loop checks only beyond the guranteed region. 
       
 
 # After you ever do expansion you do need to update the window . After computing the radius[i] compute new right boundary from the center i . If this new boundary goes beyond current R . update L and R to this palindrome boundaries this keeps [l,R] as the rightmost reaching palindrome
@@ -140,10 +140,10 @@ Radius storage: Dont declare the radius vector inside the loop but declare it on
 Why?
 L and R are supposed to be describing the current rightmost palindrome segment that you have already found and are using to speed up the next center . Before you process the first center there is no such segment yet so the window should be invalid or empty.
 
-Why that helps 
+# Why that helps? 
 It gives you one uniform rule for every center 
 The first center does not need a special case and you expansion logic can fall through to start from the radius 1 and expand outward.
-For the first center the test " is this center inside the current window ?"  is false immediately so you can skip the mirror reuse and then expand naturally from the center . So the main benefit is the control flow  becasue you have one consistent branch for all the centers and no special handling for the first one and then you can have cleaner Manacher logic
+For the first center the test " is this center inside the current window ?"is false immediately so you can skip the mirror reuse and then expand naturally from the center . So the main benefit is the control flow  becasue you have one consistent branch for all the centers and no special handling for the first one and then you can have cleaner Manacher logic
 
 1. Meaning of the radius at the center i 
       radius[i] = number of the characters in the half expansion including the center so the palindrom length at i is 2* radius[i]-1
@@ -151,7 +151,7 @@ For the first center the test " is this center inside the current window ?"  is 
 2. L and R are the boundaries of the rightmost palindrome window discovered so far
 
 3. Window is [L,R]
- this is the palindrom that currently reaches the farthers to the right and it is the one that we use for the optimization of the mirror reuse
+ this is the palindrome that currently reaches the fartherst to the right and it is the one that we use for the optimization of the mirror reuse
  3. Empty start state
  Before any center is processed no known window exists
  So initialize to an empty invalid window which is the L= 0 and the R=-1 then for the i = 0 i is not inside any known window and no mirror reuse can happen with this and thus you can start from the base radius and then expand normally 
@@ -160,7 +160,7 @@ For the first center the test " is this center inside the current window ?"  is 
  Mirror would be reflected around the center of the [L,R] and then you can keep running the expansion loop to try to extend further 
  5. Why mirror works?
  Inside the [L,R] palindrome symmetry gives information from the mirrored center so that you can skip many comparisons and you have the initial radius given by what is atleast what the mirror giarantees and is capped by the distance to the R boundary 
-Then the expansion loop only checks beyond the guaranteed region 
+ Then the expansion loop only checks beyond the guaranteed region 
  6. After the expansion update window you must then  compute the new right boundary from the center i and if this new boundary goes beyond the current R then you have to update the L and R to this palindrom's boundaries . This is what keeps the [L,R] interval as the rightmost-reaching palindrome 
  7. After the radius[i] is finalized then you can have the 
       start = i-(radius[i]-1) 
@@ -180,10 +180,11 @@ Then the expansion loop only checks beyond the guaranteed region
 
 # What goes where
 Outside loop:
+
 radius array
 L and R rolling window boundaries
-
 Inside loop for each center i:
+
 mirror index
 initial radius for i
 expansion updates
@@ -195,7 +196,7 @@ If inside the window use the mirror-based initial radius which is the R-i+1, in 
 Mirror formula = L+R-i
 
 #  Expand with while 
-While the left and the right are in  the bounds then the characters match , grows radius.  Please note  that the while condition must use the bounds around the center and do not compare the s[i] with the s[i_mirror] for the expansion . Expansion compares the two symmetric positons around i with the boundary checks on both the sides. While body must include the logic to expand the radius at i .
+While the left and the right are in  the bounds and the characters match , grows radius.  Please note  that the while condition must use the bounds around the center and do not compare the s[i] with the s[i_mirror] for the expansion . Expansion compares the two symmetric positons around i with the boundary checks on both the sides. While body must include the logic to expand the radius at i .
 
 # Convert the radius to local boundaries
 start and the end from the center and radius 
@@ -223,7 +224,7 @@ Another quick trick:
 
 bestEnd = “best that lands here”
 leftBest = “best seen so far while walking from left”
-Why you need it:
+# Why you need it?
 After Manacher, you discover palindromes by center.
 But final split logic needs boundary-based info.
 bestEnd converts center info into “where it ends,” so prefix accumulation (leftBest) becomes easy.
@@ -260,6 +261,9 @@ Intuition:
 That difference forces the direction.
 
 One more important note: your current `leftBest` loop is not safe as written because `leftBest[i-1]` is invalid when `i = 0`. So `leftBest` also needs a proper base case before the forward pass starts.
+
+line # 178 in the following statement  leftBest[0]=bestEnd[0];
+                                        rightBest[n-1]=bestStart[n-1];
 
 So the big idea is:
 - prefix info goes left to right
@@ -391,7 +395,17 @@ So the repair direction is:
 
 That is the core issue I would investigate first before touching anything else.
 
-## Problem description
+If you want, next I can help you do one manual dry run on a tiny string and show exactly where your current `bestEnd` construction loses information.
+
+
+
+
+264 x 7
+CODEX
+CHAT
+VECTOR REPRESENTATION IN DYNAMIC PROGRAMMING TABLE
+Yes, that is a strong debugging instinct, but the precise reason matters.
+
 Your current problem is not that start and end are computed outside the loop.
 The problem is that by computing them only once after expansion finishes, you record only the largest palindrome for that center.
 
@@ -625,6 +639,50 @@ So no, the fix is not “add a full inner loop over radii for every center” in
 The fix is “record the outermost one, then propagate the inner layers efficiently.”
 
 If you want, next I can help you derive the exact direction of those two propagation passes from one concrete example like a palindrome of length 7 centered at index 5.
+
+
+Exactly the right questions.
+
+For i = 13 with window [L, R] = [4, 14]:
+
+1. Mirror index
+mirror = L + R - i = 4 + 14 - 13 = 5
+
+2. How do we know radius at mirror from previous computation?
+Because Manacher scans i from left to right.
+When you are at i = 13, every index < 13 is already processed.
+Mirror = 5 is less than 13, so radius[5] was already computed earlier.
+
+3. What is radius[5] in this example?
+Using the same string we discussed:
+ppppaaaaabaaaaacccc
+At index 5:
+- radius 1 is always valid
+- compare 4 and 6: a == a, so radius 2 valid
+- compare 3 and 7: p != a, stop
+So radius[5] = 2.
+
+4. Cap at i = 13
+R - i + 1 = 14 - 13 + 1 = 2
+
+So inherited initial radius is:
+initial = min(radius[mirror], R - i + 1) = min(2, 2) = 2
+
+Now your terminology question:
+
+- “safe lower bound” does not mean L.
+It means: a guaranteed radius value that is definitely valid before new checks.
+That guaranteed value is min(radius[mirror], R - i + 1).
+
+- “hard cap” does not mean the variable R by itself.
+It means: inside the current known window, copied information cannot go past the right edge, so inheritance is capped by distance to R.
+
+Important nuance:
+This cap is for copied/inherited knowledge only.
+After that, the expansion loop can still grow beyond R if new characters match, and then R gets updated.
+
+One-line memory trick:
+Mirror gives guaranteed start, R-distance limits guaranteed copy, while-loop tries to go further.
 
 
 

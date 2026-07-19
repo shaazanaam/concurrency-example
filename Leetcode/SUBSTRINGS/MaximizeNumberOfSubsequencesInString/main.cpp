@@ -13,6 +13,7 @@ public:
         int countA=0,countB=0;
         long long ogCount=0; // existing subsequence inside the text
         // countA = number of  times we have seen a 
+        // countB = number of times we have seen b
         for (auto ch: text){
             
             if(ch==b) {

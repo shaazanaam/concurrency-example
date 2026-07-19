@@ -27,7 +27,7 @@ class Solution{
                 if(map[s[end]]==k) atLeastKcount++; // incrementing the atleastKCount
                 end++;
                 while(unique>i){
-                    if(map[s[begin]]==k)atLeastKcount--; // decrementing the atLeastKCount when you know it was k before and then later on in the next line you would be decreasing the character's count it would be come k-1                                               
+                    if(map[s[begin]]==k)atLeastKcount--; // decrementing the atLeastKCount when you know it was k before and then later on in the next line you would be decreasing the character's count it would become k-1                                               
                     map[s[begin]]--;
                     if(map[s[begin]]==0)unique--;  // decrementing the unique becasue we are checking if the unique is greater than i which makes the window invalid and then we bring the unique count back to i
                     begin++;
