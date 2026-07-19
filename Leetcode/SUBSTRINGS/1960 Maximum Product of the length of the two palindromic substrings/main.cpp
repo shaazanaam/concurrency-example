@@ -244,12 +244,7 @@ int main() {
     }
 
     cout << "\n";
-<<<<<<< HEAD
     //debugMaxProductBuild(s);
-=======
-    long long ans = Solution().maxProduct(s);
-    debugMaxProductBuild(s);
->>>>>>> 867b8b5b0a2a66f03534b184a08928f9df87e915
 
 
     Solution sol;
